@@ -13,9 +13,10 @@
         
         <Grid Width="1600" Height="700">
             <Button x:Name="Erase" Height="80" Width="150" Content="Erase Color" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,10,10,10" Click="Erase_Click" Canvas.ZIndex="2"/>
+            <Button x:Name="ToggleDrawing" Height="80" Width="150" Content="Toggle Drawing" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,114" Click="Toggle_Click" Canvas.ZIndex="2"/>
             <Image Name="camera" Opacity="0.3"/>
             <Canvas Name="canvas">
-                <local:DrawingBrush x:Name="brush" Width="200" Height="200" />
+                <local:DrawingBrush x:Name="brush" Width="100" Height="100" />
                 <Polyline Name="trail" Stroke="Blue" StrokeThickness="10">
                     <Polyline.Effect>
                         <BlurEffect Radius="5" />
