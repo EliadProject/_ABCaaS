@@ -1,6 +1,7 @@
 ﻿using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -32,6 +33,8 @@ namespace KinectDrawing
         private int _height = 0;
         private byte[] _pixels = null;
         private WriteableBitmap _bitmap = null;
+
+        private Uri imagesPath = new Uri(@"C:\Users\Eliad\source\repos\_ABCaaS\imgs");
 
         public MainWindow()
         {
@@ -139,11 +142,102 @@ namespace KinectDrawing
         private void Erase_Click(object sender, RoutedEventArgs e)
         {
             trail.Points.Clear();
+            
         }
 
         private void Toggle_Click(object sender, RoutedEventArgs e)
         {
             isDrawing = !isDrawing;
         }
+        private void ExportTrail_Click(object sender, RoutedEventArgs e)
+        {
+            //ExportToPng(imagesPath, canvas);
+            // Set Polygon.Points properties
+            Image resultImage = new Image();
+
+            
+            
+            trail.Measure(new Size(resultImage.Width, resultImage.Height));
+            trail.Arrange(new Rect(new Size(resultImage.Width, resultImage.Height)));
+
+            RenderTargetBitmap RTbmap = new RenderTargetBitmap((int)resultImage.Width,
+              (int)resultImage.Height, 96, 96, PixelFormats.Pbgra32);
+            
+            
+
+        }
+
+
+        public void ExportToPng(Uri path, Canvas canvas)
+
+        {
+
+            if (path == null) return;
+
+            // Save current canvas transform
+
+            Transform transform = canvas.LayoutTransform;
+
+            // reset current transform (in case it is scaled or rotated)
+
+            canvas.LayoutTransform = null;
+
+            // Get the size of canvas
+
+            Size size = new Size(canvas.Width, canvas.Height);
+
+            // Measure and arrange the canvas
+
+            // VERY IMPORTANT
+
+            canvas.Measure(size);
+
+            canvas.Arrange(new Rect(size));
+
+            // Create a render bitmap and push the canvas to it
+
+            RenderTargetBitmap renderBitmap =
+
+              new RenderTargetBitmap(
+
+                (int)size.Width,
+
+                (int)size.Height,
+
+                96d,
+
+                96d,
+
+                PixelFormats.Pbgra32);
+
+            renderBitmap.Render(canvas);
+
+            // Create a file stream for saving image
+
+            using (FileStream outStream = new FileStream(path.LocalPath, FileMode.Create))
+
+            {
+
+                // Use png encoder for our data
+
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+
+                // push the rendered bitmap to it
+
+                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                // save the data to the stream
+
+                encoder.Save(outStream);
+
+            }
+
+            // Restore previously saved layout
+
+            canvas.LayoutTransform = transform;
+
+        }
+
+
     }
 }
