@@ -1,0 +1,29 @@
+﻿<Window x:Class="KinectDrawing.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KinectDrawing"
+        mc:Ignorable="d"
+        Title="KINECT Drawing" Height="350" Width="525"
+        WindowState="Maximized"
+        Background="Black"
+        Closing="Window_Closing">
+    <Viewbox>
+        
+        <Grid Width="1600" Height="700">
+            <Button x:Name="Erase" Height="80" Width="150" Content="Erase Color" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,10,10,10" Click="Erase_Click" Canvas.ZIndex="2"/>
+            <Image Name="camera" Opacity="0.3"/>
+            <Canvas Name="canvas">
+                <local:DrawingBrush x:Name="brush" Width="200" Height="200" />
+                <Polyline Name="trail" Stroke="Blue" StrokeThickness="10">
+                    <Polyline.Effect>
+                        <BlurEffect Radius="5" />
+                    </Polyline.Effect>
+                </Polyline>
+            </Canvas>
+            
+        </Grid>
+       
+    </Viewbox>
+</Window>
