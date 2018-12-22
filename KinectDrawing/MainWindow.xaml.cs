@@ -26,6 +26,7 @@ namespace KinectDrawing
         private ColorFrameReader _colorReader = null;
         private BodyFrameReader _bodyReader = null;
         private IList<Body> _bodies = null;
+        private bool isDrawing = true;
 
         private int _width = 0;
         private int _height = 0;
@@ -117,14 +118,18 @@ namespace KinectDrawing
                             float x = handRightPoint.X;
                             float y = handRightPoint.Y;
 
-                            if (!float.IsInfinity(x) && ! float.IsInfinity(y))
+                            if (!float.IsInfinity(x) && !float.IsInfinity(y))
                             {
-                                // DRAW!
-                                trail.Points.Add(new Point { X = x, Y = y });
-
-                                Canvas.SetLeft(brush, x - brush.Width / 2.0);
-                                Canvas.SetTop(brush, y - brush.Height);
+                                if (isDrawing)
+                                {
+                                    // DRAW!
+                                    trail.Points.Add(new Point { X = x, Y = y });
+                                }
+                                    Canvas.SetLeft(brush, x - brush.Width / 2.0);
+                                    Canvas.SetTop(brush, y - brush.Height);
+                                
                             }
+
                         }
                     }
                 }
@@ -134,6 +139,11 @@ namespace KinectDrawing
         private void Erase_Click(object sender, RoutedEventArgs e)
         {
             trail.Points.Clear();
+        }
+
+        private void Toggle_Click(object sender, RoutedEventArgs e)
+        {
+            isDrawing = !isDrawing;
         }
     }
 }
