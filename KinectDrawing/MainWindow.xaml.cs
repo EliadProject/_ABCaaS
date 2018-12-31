@@ -1,7 +1,9 @@
 ﻿using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +35,11 @@ namespace KinectDrawing
         private byte[] _pixels = null;
         private WriteableBitmap _bitmap = null;
 
+        Point lastPoint;
+        Point newPoint;
+
+        private static int img_num = 1;
+        private static string root_path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         public MainWindow()
         {
             InitializeComponent();
@@ -107,7 +114,7 @@ namespace KinectDrawing
 
                     if (body != null)
                     {
-                        Joint handRight = body.Joints[JointType.WristLeft];
+                        Joint handRight = body.Joints[JointType.HandLeft];
 
 
                         if (handRight.TrackingState != TrackingState.NotTracked)
@@ -117,33 +124,65 @@ namespace KinectDrawing
 
                             float x = handRightPoint.X;
                             float y = handRightPoint.Y;
-
+                            newPoint = new Point(x, y);
                             if (!float.IsInfinity(x) && !float.IsInfinity(y))
                             {
                                 if (isDrawing)
                                 {
-                                    // DRAW!
-                                    trail.Points.Add(new Point { X = x, Y = y });
+
+                                    //Auclid distance
+                                    double distance = Math.Sqrt(Math.Pow((newPoint.X - lastPoint.X), 2) + Math.Pow((newPoint.Y - lastPoint.Y), 2));
+                                    //draw only if it's the first run or the distance is between configured range 
+                                    if ((lastPoint.X == 0 && lastPoint.Y == 0) || distance > 5 && distance < 30)
+                                    {
+                                        trail.Points.Add(newPoint);
+                                    }
                                 }
-                                    Canvas.SetLeft(brush, x - brush.Width / 2.0);
-                                    Canvas.SetTop(brush, y - brush.Height);
-                                
+                                else
+                                {
+                                    // DRAW!
+                                    trail.Points.Add(newPoint);
+                                }
+                                lastPoint = newPoint;
+
                             }
+                            Canvas.SetLeft(brush, newPoint.X - brush.Width / 2.0);
+                            Canvas.SetTop(brush, newPoint.Y - brush.Height);
 
                         }
+
                     }
                 }
             }
         }
+    
 
-        private void Erase_Click(object sender, RoutedEventArgs e)
-        {
-            trail.Points.Clear();
-        }
+    private void Erase_Click(object sender, RoutedEventArgs e)
+    {
+        trail.Points.Clear();
+    }
 
-        private void Toggle_Click(object sender, RoutedEventArgs e)
+    private void Toggle_Click(object sender, RoutedEventArgs e)
+    {
+        isDrawing = !isDrawing;
+    }
+    private void Export_Trail(Object sender, RoutedEventArgs e)
+    {
+        Polyline newTrain = trail;
+        newTrain.Measure(new Size(200, 200));
+        newTrain.Arrange(new Rect(new Size(1200, 800)));
+
+        RenderTargetBitmap RTbmap = new RenderTargetBitmap(_width, _height, 96.0, 96.0, PixelFormats.Default);
+        RTbmap.Render(newTrain);
+
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(RTbmap));
+
+        string img_name = "imgs/" + img_num++ + ".jpg";
+        using (var file = File.OpenWrite(img_name))
         {
-            isDrawing = !isDrawing;
+            encoder.Save(file);
         }
     }
+}
 }
