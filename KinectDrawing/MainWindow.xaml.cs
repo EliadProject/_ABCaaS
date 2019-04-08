@@ -156,58 +156,60 @@ namespace KinectDrawing
                 }
             }
         }
-    
 
-    private void Erase_Click(object sender, RoutedEventArgs e)
-    {
-        trail.Points.Clear();
-    }
 
-    private void Toggle_Click(object sender, RoutedEventArgs e)
-    {
-        isDrawing = !isDrawing;
-    }
+        private void Erase_Click(object sender, RoutedEventArgs e)
+        {
+            trail.Points.Clear();
+        }
 
-    private void runPythonRetrain(string img_path)
-    {
-        string fileName = @"C:\Users\admin\Anaconda3\envs\tensorenviron\label_image.py " + img_path;
+        private void Toggle_Click(object sender, RoutedEventArgs e)
+        {
+            isDrawing = !isDrawing;
+        }
+
+        private void runPythonRetrain(string img_path)
+        {
+            string fileName = @"C:\Users\admin\Anaconda3\envs\tensorenviron\label_image.py " + img_path;
             // Example - C:\Users\admin\Anaconda3\envs\tensorenviron\1.jpg
 
-        Process p = new Process();
-        p.StartInfo = new ProcessStartInfo(@"python.exe", fileName)
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo(@"python.exe", fileName)
+            {
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            p.Start();
+
+            string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
+
+            MessageBox.Show(output);
+
+            Console.ReadLine();
+        }
+
+        private void Export_Trail(Object sender, RoutedEventArgs e)
         {
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-        p.Start();
+            Polyline newTrain = trail;
+            newTrain.Measure(new Size(200, 200));
+            newTrain.Arrange(new Rect(new Size(1200, 800)));
 
-        string output = p.StandardOutput.ReadToEnd();
-        p.WaitForExit();
+            RenderTargetBitmap RTbmap = new RenderTargetBitmap(_width, _height, 96.0, 96.0, PixelFormats.Default);
+            RTbmap.Render(newTrain);
 
-        MessageBox.Show(output);
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(RTbmap));
 
-        Console.ReadLine();
-    }
-
-    private void Export_Trail(Object sender, RoutedEventArgs e)
-    {
-        Polyline newTrain = trail;
-        newTrain.Measure(new Size(200, 200));
-        newTrain.Arrange(new Rect(new Size(1200, 800)));
-
-        RenderTargetBitmap RTbmap = new RenderTargetBitmap(_width, _height, 96.0, 96.0, PixelFormats.Default);
-        RTbmap.Render(newTrain);
-
-        var encoder = new PngBitmapEncoder();
-        encoder.Frames.Add(BitmapFrame.Create(RTbmap));
-
-        string img_name = "../../imgs" + img_num++ + ".jpg";
-        using (var file = File.OpenWrite(img_name))
-        {
+            string img_name = "../../imgs" + img_num++ + ".jpg";
+            using (var file = File.OpenWrite(img_name))
+            {
                 encoder.Save(file);
                 runPythonRetrain(img_name);
+            }
         }
     }
 }
-}
+
+
