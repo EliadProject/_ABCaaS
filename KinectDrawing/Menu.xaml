@@ -11,17 +11,9 @@
             <ImageBrush ImageSource="images\bg.png"/>
         </Grid.Background>
 
-        <Image Height="138" Margin="388,-5,404,350">
-            <Image.Source>
-                <BitmapImage  UriSource="images\logo.png" />
-            </Image.Source>
-        </Image>
+        <Image Height="138" Margin="388,-5,404,350" Source="images\logo.png"/>
 
-        <Image Height="507" Margin="387,-125,405,101">
-            <Image.Source>
-                <BitmapImage  UriSource="images\slogen.png" />
-            </Image.Source>
-        </Image>
+        <Image Height="507" Margin="387,-125,405,101" Source="images\slogen.png"/>
 
         <Button Content=""
                 BorderThickness="0"
@@ -30,7 +22,8 @@
                 Margin="325,216,0,0"
                 Width="100"
                 Height="100"
-                Click="Button_Click">
+                Click="Button_Click"
+                Style="{StaticResource MyButton}">
             <Button.Background>
                 <ImageBrush ImageSource="images\play.png"/>
             </Button.Background>
@@ -43,7 +36,8 @@
                 Margin="454,216,0,0"
                 Width="100"
                 Height="100"
-                Click="Button_Click">
+                Click="Button_Click"
+                Style="{StaticResource MyButton}">
             <Button.Background>
                 <ImageBrush ImageSource="images\info.png"/>
             </Button.Background>
@@ -56,7 +50,8 @@
                 Margin="575,216,0,0"
                 Width="100"
                 Height="100"
-                Click="ExitApp">
+                Click="ExitApp"
+                Style="{StaticResource MyButton}">
             <Button.Background>
                 <ImageBrush ImageSource="images\exit.png"/>
             </Button.Background>
@@ -69,10 +64,20 @@
                 Margin="26,389,0,0"
                 Width="60"
                 Height="60"
-                Click="Button_Click">
+                Click="Button_Click"
+                Style="{StaticResource MyButton}">
+           
             <Button.Background>
                 <ImageBrush ImageSource="images\settings.png"/>
             </Button.Background>
         </Button>
+
+        
+       
+        
     </Grid>
+
+   
 </Window>
+    
+    

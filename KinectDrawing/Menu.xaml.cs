@@ -37,5 +37,6 @@ namespace KinectDrawing
         {
             System.Windows.Application.Current.Shutdown();
         }
+
     }
 }
