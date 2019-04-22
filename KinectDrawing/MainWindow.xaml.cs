@@ -17,6 +17,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using Microsoft.Speech.AudioFormat;
+using Microsoft.Speech.Recognition;
+using Microsoft.Samples.Kinect.SpeechBasics;
 
 namespace KinectDrawing
 {
@@ -41,6 +45,17 @@ namespace KinectDrawing
 
         private static int img_num = 1;
         private static string root_path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        /// <summary>
+        /// Stream for 32b-16b conversion.
+        /// </summary>
+        private KinectAudioStream convertStream = null;
+
+        /// <summary>
+        /// Speech recognition engine using audio data from Kinect.
+        /// </summary>
+        private SpeechRecognitionEngine speechEngine = null;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -68,7 +83,151 @@ namespace KinectDrawing
                 camera.Source = _bitmap;
             }
         }
+        /// <summary>
+        /// Gets the metadata for the speech recognizer (acoustic model) most suitable to
+        /// process audio from Kinect device.
+        /// </summary>
+        /// <returns>
+        /// RecognizerInfo if found, <code>null</code> otherwise.
+        /// </returns>
+        private static RecognizerInfo TryGetKinectRecognizer()
+        {
+            IEnumerable<RecognizerInfo> recognizers;
 
+            // This is required to catch the case when an expected recognizer is not installed.
+            // By default - the x86 Speech Runtime is always expected. 
+            try
+            {
+                recognizers = SpeechRecognitionEngine.InstalledRecognizers();
+            }
+            catch (COMException)
+            {
+                return null;
+            }
+
+            foreach (RecognizerInfo recognizer in recognizers)
+            {
+                string value;
+                recognizer.AdditionalInfo.TryGetValue("Kinect", out value);
+                if ("True".Equals(value, StringComparison.OrdinalIgnoreCase) && "en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    return recognizer;
+                }
+            }
+
+            return null;
+        }
+        /// <summary>
+        /// Execute initialization tasks.
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            // Only one sensor is supported
+            this._sensor = KinectSensor.GetDefault();
+
+            if (this._sensor != null)
+            {
+                // open the sensor
+                this._sensor.Open();
+
+                // grab the audio stream
+                IReadOnlyList<AudioBeam> audioBeamList = this._sensor.AudioSource.AudioBeams;
+                System.IO.Stream audioStream = audioBeamList[0].OpenInputStream();
+
+                // create the convert stream
+                this.convertStream = new KinectAudioStream(audioStream);
+            }
+            else
+            {
+                // on failure, set the status text
+               
+                return;
+            }
+
+            RecognizerInfo ri = TryGetKinectRecognizer();
+
+            if (null != ri)
+            {
+
+
+                this.speechEngine = new SpeechRecognitionEngine(ri.Id);
+
+                /****************************************************************
+                * 
+                * Use this code to create grammar programmatically rather than from
+                * a grammar file.
+                * 
+                * var directions = new Choices();
+                * directions.Add(new SemanticResultValue("forward", "FORWARD"));
+                * directions.Add(new SemanticResultValue("forwards", "FORWARD"));
+                * directions.Add(new SemanticResultValue("straight", "FORWARD"));
+                * directions.Add(new SemanticResultValue("backward", "BACKWARD"));W
+                * directions.Add(new SemanticResultValue("backwards", "BACKWARD"));
+                * directions.Add(new SemanticResultValue("back", "BACKWARD"));
+                * directions.Add(new SemanticResultValue("turn left", "LEFT"));
+                * directions.Add(new SemanticResultValue("turn right", "RIGHT"));
+                *
+                * var gb = new GrammarBuilder { Culture = ri.Culture };
+                * gb.Append(directions);
+                *
+                * var g = new Grammar(gb);
+                * 
+                ****************************************************************/
+
+                // Create a grammar from grammar definition XML file.
+                using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(Properties.Resources.SpeechGrammar)))
+                {
+                    var g = new Grammar(memoryStream);
+                    this.speechEngine.LoadGrammar(g);
+                }
+
+                this.speechEngine.SpeechRecognized += this.SpeechRecognized;
+                
+
+                // let the convertStream know speech is going active
+                this.convertStream.SpeechActive = true;
+
+                // For long recognition sessions (a few hours or more), it may be beneficial to turn off adaptation of the acoustic model. 
+                // This will prevent recognition accuracy from degrading over time.
+                ////speechEngine.UpdateRecognizerSetting("AdaptationOn", 0);
+
+                this.speechEngine.SetInputToAudioStream(
+                    this.convertStream, new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
+                this.speechEngine.RecognizeAsync(RecognizeMode.Multiple);
+            }
+            else
+            {
+                
+            }
+        }
+        /// <summary>
+        /// Handler for recognized speech events.
+        /// </summary>
+        /// <param name="sender">object sending the event.</param>
+        /// <param name="e">event arguments.</param>
+        private void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        {
+            // Speech utterance confidence below which we treat speech as if it hadn't been heard
+            const double ConfidenceThreshold = 0.3;
+
+            
+
+            if (e.Result.Confidence >= ConfidenceThreshold)
+            {
+                switch (e.Result.Semantics.Value.ToString())
+                {
+                    case "FORWARD":
+                         break;
+                }
+            }
+        }
+        /// <summary>
+        /// Execute un-initialization tasks.
+        /// </summary>
+        /// <param name="sender">object sending the event.</param>
+        /// <param name="e">event arguments.</param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (_colorReader != null)
@@ -85,6 +244,18 @@ namespace KinectDrawing
             {
                 _sensor.Close();
             }
+            if (null != this.convertStream)
+            {
+                this.convertStream.SpeechActive = false;
+            }
+
+            if (null != this.speechEngine)
+            {
+                
+                this.speechEngine.RecognizeAsyncStop();
+            }
+
+            
         }
 
         private void ColorReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)

@@ -2,31 +2,30 @@
   <rule id="rootRule">
     <one-of>
       <item>
-        <tag>FORWARD</tag>
+        <tag>Check Result</tag>
         <one-of>
-          <item> forwards </item>
-          <item> forward </item>
-          <item> straight </item>
+          <item> check </item>
+          <item> checks </item>
+          <item> check result </item>
+          <item> checks result</item>
+          <item> double check</item>
         </one-of>
       </item>
       <item>
-        <tag>BACKWARD</tag>
+        <tag>Erase Screen</tag>
         <one-of>
-          <item> backward </item>
-          <item> backwards </item>
-          <item> back </item>
+          <item> erase </item>
+          <item> clean </item>
+          <item> clean screen </item>
+          <item> erase screen </item>
         </one-of>
       </item>
       <item>
-        <tag>LEFT</tag>
+        <tag>toggle</tag>
         <one-of>
-          <item> turn left </item>
-        </one-of>
-      </item>
-      <item>
-        <tag>RIGHT</tag>
-        <one-of>
-          <item> turn right </item>
+          <item> toggle </item>
+          <item> switch </item>
+          <item> toggles</item>    
         </one-of>
       </item>
     </one-of>
