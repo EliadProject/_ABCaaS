@@ -29,6 +29,7 @@ namespace KinectDrawing
     /// </summary>
     public partial class MainWindow : Window
     {
+
         private KinectSensor _sensor = null;
         private ColorFrameReader _colorReader = null;
         private BodyFrameReader _bodyReader = null;
@@ -81,6 +82,7 @@ namespace KinectDrawing
                 _bodies = new Body[_sensor.BodyFrameSource.BodyCount];
 
                 camera.Source = _bitmap;
+                
             }
         }
         /// <summary>
@@ -93,7 +95,7 @@ namespace KinectDrawing
         private static RecognizerInfo TryGetKinectRecognizer()
         {
             IEnumerable<RecognizerInfo> recognizers;
-
+           
             // This is required to catch the case when an expected recognizer is not installed.
             // By default - the x86 Speech Runtime is always expected. 
             try
@@ -124,9 +126,9 @@ namespace KinectDrawing
         /// <param name="e">event arguments</param>
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show("Winows loadded");
             // Only one sensor is supported
             this._sensor = KinectSensor.GetDefault();
-
             if (this._sensor != null)
             {
                 // open the sensor
@@ -142,46 +144,34 @@ namespace KinectDrawing
             else
             {
                 // on failure, set the status text
-               
+                  MessageBox.Show("Error1");
+            
                 return;
             }
 
             RecognizerInfo ri = TryGetKinectRecognizer();
-
             if (null != ri)
             {
-
-
                 this.speechEngine = new SpeechRecognitionEngine(ri.Id);
+                  var commands = new Choices();
 
-                /****************************************************************
-                * 
-                * Use this code to create grammar programmatically rather than from
-                * a grammar file.
-                * 
-                * var directions = new Choices();
-                * directions.Add(new SemanticResultValue("forward", "FORWARD"));
-                * directions.Add(new SemanticResultValue("forwards", "FORWARD"));
-                * directions.Add(new SemanticResultValue("straight", "FORWARD"));
-                * directions.Add(new SemanticResultValue("backward", "BACKWARD"));W
-                * directions.Add(new SemanticResultValue("backwards", "BACKWARD"));
-                * directions.Add(new SemanticResultValue("back", "BACKWARD"));
-                * directions.Add(new SemanticResultValue("turn left", "LEFT"));
-                * directions.Add(new SemanticResultValue("turn right", "RIGHT"));
-                *
-                * var gb = new GrammarBuilder { Culture = ri.Culture };
-                * gb.Append(directions);
-                *
-                * var g = new Grammar(gb);
-                * 
-                ****************************************************************/
+                //define the vocabelery of the commands
+                  commands.Add(new SemanticResultValue("check result", "Check"));
+                commands.Add(new SemanticResultValue("check", "Check"));
+                commands.Add(new SemanticResultValue("checks result", "Check"));
+                commands.Add(new SemanticResultValue("Erase Screen", "Erase"));
+                commands.Add(new SemanticResultValue("Erase", "Erase"));
+                commands.Add(new SemanticResultValue("Erases", "Erase"));
+                commands.Add(new SemanticResultValue("toggles", "Toggle"));
+                  commands.Add(new SemanticResultValue("Toggle", "Toggle"));
+                
+                  var gb = new GrammarBuilder { Culture = ri.Culture };
+                  gb.Append(commands);
+                 
+                  var g = new Grammar(gb);
 
-                // Create a grammar from grammar definition XML file.
-                using (var memoryStream = new MemoryStream(Encoding.ASCII.GetBytes(Properties.Resources.SpeechGrammar)))
-                {
-                    var g = new Grammar(memoryStream);
-                    this.speechEngine.LoadGrammar(g);
-                }
+               this.speechEngine.LoadGrammar(g);
+                
 
                 this.speechEngine.SpeechRecognized += this.SpeechRecognized;
                 
@@ -207,18 +197,18 @@ namespace KinectDrawing
         /// </summary>
         /// <param name="sender">object sending the event.</param>
         /// <param name="e">event arguments.</param>
+        //Do 
         private void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             // Speech utterance confidence below which we treat speech as if it hadn't been heard
             const double ConfidenceThreshold = 0.3;
 
-            
-
             if (e.Result.Confidence >= ConfidenceThreshold)
             {
+                //check the speech to the commands
                 switch (e.Result.Semantics.Value.ToString())
                 {
-                    case "Check Result":
+                    case "Check":
                         {
                             Polyline newTrain = trail;
                             newTrain.Measure(new Size(200, 200));
@@ -240,7 +230,7 @@ namespace KinectDrawing
                             break;
                             
                         }
-                    case "Erase Screen":
+                    case "Erase":
                         trail.Points.Clear();
                         MessageBox.Show("Erase your mind");
                         break;
