@@ -352,17 +352,18 @@ namespace KinectDrawing
             }
         }
 
-
+        //action button for erase_click
+        /*
         private void Erase_Click(object sender, RoutedEventArgs e)
         {
             trail.Points.Clear();
         }
-
+        //action button for toggle_click
         private void Toggle_Click(object sender, RoutedEventArgs e)
         {
             isDrawing = !isDrawing;
         }
-
+        */
         private void runPythonRetrain(string img_path)
         {
             string fileName = @"C:\Users\admin\Anaconda3\envs\tensorenviron\label_image.py " + img_path;
@@ -385,7 +386,7 @@ namespace KinectDrawing
             Console.ReadLine();
         }
 
-        private void Export_Trail(Object sender, RoutedEventArgs e)
+       /* private void Export_Trail(Object sender, RoutedEventArgs e)
         {
             Polyline newTrain = trail;
             newTrain.Measure(new Size(200, 200));
@@ -404,6 +405,7 @@ namespace KinectDrawing
                 runPythonRetrain(img_name);
             }
         }
+        */
     }
 }
 
