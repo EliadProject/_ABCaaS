@@ -236,13 +236,17 @@ namespace KinectDrawing
                                 encoder.Save(file);
                                 runPythonRetrain(img_name);
                             }
+                            MessageBox.Show("Mazel Tov!");
                             break;
+                            
                         }
                     case "Erase Screen":
                         trail.Points.Clear();
+                        MessageBox.Show("Erase your mind");
                         break;
                     case "Toggle":
                         isDrawing = !isDrawing;
+                        MessageBox.Show("Toggle your self");
                         break;
                 }
             }
