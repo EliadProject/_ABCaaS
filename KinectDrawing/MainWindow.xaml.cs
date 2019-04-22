@@ -18,9 +18,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
-using Microsoft.Speech.AudioFormat;
-using Microsoft.Speech.Recognition;
+using KinectDrawing.Game;
+using KinectDrawing.Game.LevelClasses;
+
 using Microsoft.Samples.Kinect.SpeechBasics;
+using System.Speech.Recognition;
+using System.Speech.AudioFormat;
 
 namespace KinectDrawing
 {
@@ -56,11 +59,12 @@ namespace KinectDrawing
         /// </summary>
         private SpeechRecognitionEngine speechEngine = null;
 
+        private LevelNode currentLevel;
 
         public MainWindow()
         {
             InitializeComponent();
-
+           
             _sensor = KinectSensor.GetDefault();
 
             if (_sensor != null)
@@ -82,8 +86,17 @@ namespace KinectDrawing
                 _bodies = new Body[_sensor.BodyFrameSource.BodyCount];
 
                 camera.Source = _bitmap;
-                
+
+                //Init GameFlow
+                currentLevel = GameFlow.createGameFlow();
+                changeLetter();
+
             }
+        }
+
+        private void changeLetter()
+        {
+            LevelLbl.Text = "Letter: " + currentLevel.getLetter();
         }
         /// <summary>
         /// Gets the metadata for the speech recognizer (acoustic model) most suitable to
@@ -347,7 +360,7 @@ namespace KinectDrawing
         }
 
         //action button for erase_click
-        /*
+        
         private void Erase_Click(object sender, RoutedEventArgs e)
         {
             trail.Points.Clear();
@@ -357,7 +370,7 @@ namespace KinectDrawing
         {
             isDrawing = !isDrawing;
         }
-        */
+        
         private void runPythonRetrain(string img_path)
         {
             string fileName = @"C:\Users\admin\Anaconda3\envs\tensorenviron\label_image.py " + img_path;
@@ -380,7 +393,8 @@ namespace KinectDrawing
             Console.ReadLine();
         }
 
-       /* private void Export_Trail(Object sender, RoutedEventArgs e)
+
+        private void Export_Trail(Object sender, RoutedEventArgs e)
         {
             Polyline newTrain = trail;
             newTrain.Measure(new Size(200, 200));
@@ -396,11 +410,69 @@ namespace KinectDrawing
             using (var file = File.OpenWrite(img_name))
             {
                 encoder.Save(file);
-                runPythonRetrain(img_name);
+                if (isPaintingCorrect(img_name))  //Correct !
+                {
+                    nextLevel();
+                }
+                else
+                {
+                    lbl.Text = "Incorrect!! try again please";
+                    restart();
+                }
+
+
             }
+
         }
-        */
+         
+
+        private bool isPaintingCorrect(string img_path)
+        {
+            string fileName = @"C:\Users\Eliad\source\repos\EliadProject\_ABCaaS\KinectDrawing\model\label_image.py" + img_path;
+            // Example - C:\Users\admin\Anaconda3\envs\tensorenviron\1.jpg
+
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo(@"C:\Users\Eliad\Anaconda3\Scripts\activate.bat C:\Users\Eliad\Anaconda3", fileName)
+            {
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            p.Start();
+
+            string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
+
+            //compare to level's letter.
+            char levelLetter = currentLevel.getLetter();
+            if (levelLetter.Equals(output))
+                return true;
+            return false;
+
+        }
+
+        private void nextLevel()
+        {
+            //Good animation
+            currentLevel = currentLevel.next;
+            changeLetter();
+            restart();
+        }
+
+        private void failAndRestart()
+        {
+            //Fail animation
+            restart();
+        }
+        private void restart()
+        {
+            //erase polygon
+            trail.Points.Clear();
+        }
+
     }
+
+
 }
 
 

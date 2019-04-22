@@ -69,6 +69,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\GameLevelBase.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Game\Level2Game.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -77,6 +85,21 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Game\GameFlow.cs" />
+    <Compile Include="Game\GameLevelBase.xaml.cs">
+      <DependentUpon>GameLevelBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Level2Game.xaml.cs">
+      <DependentUpon>Level2Game.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Game\LevelClasses\Level.cs" />
+    <Compile Include="Game\LevelClasses\Level1.cs" />
+    <Compile Include="Game\LevelClasses\Level2.cs" />
+    <Compile Include="Game\LevelClasses\Level3.cs" />
+    <Compile Include="Game\LevelClasses\Level4.cs" />
+    <Compile Include="Game\LevelClasses\LevelNode.cs" />
+    <Compile Include="Game\LevelClasses\LevelsFactory.cs" />
+    <Compile Include="Game\LevelClasses\LevelsLinkedList.cs" />
     <Compile Include="KinectAudioStream.cs" />
     <Compile Include="DrawingBrush.xaml.cs">
       <DependentUpon>DrawingBrush.xaml</DependentUpon>
@@ -122,7 +145,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-
     <Content Include="Kinect20.Fusion.dll" />
     <Resource Include="images\add.png" />
     <Resource Include="images\bg.png" />
@@ -135,7 +157,6 @@
     <Resource Include="images\settings.png" />
     <Resource Include="images\slogen.png" />
     <Resource Include="images\stop.png" />
-
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
