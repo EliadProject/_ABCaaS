@@ -218,8 +218,32 @@ namespace KinectDrawing
             {
                 switch (e.Result.Semantics.Value.ToString())
                 {
-                    case "FORWARD":
-                         break;
+                    case "Check Result":
+                        {
+                            Polyline newTrain = trail;
+                            newTrain.Measure(new Size(200, 200));
+                            newTrain.Arrange(new Rect(new Size(1200, 800)));
+
+                            RenderTargetBitmap RTbmap = new RenderTargetBitmap(_width, _height, 96.0, 96.0, PixelFormats.Default);
+                            RTbmap.Render(newTrain);
+
+                            var encoder = new PngBitmapEncoder();
+                            encoder.Frames.Add(BitmapFrame.Create(RTbmap));
+
+                            string img_name = "../../imgs" + img_num++ + ".jpg";
+                            using (var file = File.OpenWrite(img_name))
+                            {
+                                encoder.Save(file);
+                                runPythonRetrain(img_name);
+                            }
+                            break;
+                        }
+                    case "Erase Screen":
+                        trail.Points.Clear();
+                        break;
+                    case "Toggle":
+                        isDrawing = !isDrawing;
+                        break;
                 }
             }
         }

@@ -4,8 +4,6 @@
       <item>
         <tag>Check Result</tag>
         <one-of>
-          <item> check </item>
-          <item> checks </item>
           <item> check result </item>
           <item> checks result</item>
           <item> double check</item>
@@ -14,14 +12,12 @@
       <item>
         <tag>Erase Screen</tag>
         <one-of>
-          <item> erase </item>
-          <item> clean </item>
           <item> clean screen </item>
           <item> erase screen </item>
         </one-of>
       </item>
       <item>
-        <tag>toggle</tag>
+        <tag>Toggle</tag>
         <one-of>
           <item> toggle </item>
           <item> switch </item>
