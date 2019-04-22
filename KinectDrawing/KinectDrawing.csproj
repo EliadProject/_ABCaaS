@@ -77,7 +77,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="speech_recognition.cs" />
+    <Compile Include="KinectAudioStream.cs" />
     <Compile Include="DrawingBrush.xaml.cs">
       <DependentUpon>DrawingBrush.xaml</DependentUpon>
     </Compile>
@@ -113,6 +113,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Kinect20.Fusion.dll" />
+    <Resource Include="SpeechGrammar.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
