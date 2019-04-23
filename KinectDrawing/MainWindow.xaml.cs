@@ -406,10 +406,10 @@ namespace KinectDrawing
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(RTbmap));
 
-            string img_name = "../../imgs" + img_num++ + ".jpg";
+            string img_name = @"C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\imgs\imgs" + img_num++ + ".jpg";
             using (var file = File.OpenWrite(img_name))
             {
-                encoder.Save(file);
+                //encoder.Save(file);
                 if (isPaintingCorrect(img_name))  //Correct !
                 {
                     nextLevel();
@@ -424,15 +424,22 @@ namespace KinectDrawing
             }
 
         }
-         
+
 
         private bool isPaintingCorrect(string img_path)
         {
-            string fileName = @"C:\Users\Eliad\source\repos\EliadProject\_ABCaaS\KinectDrawing\model\label_image.py" + img_path;
-            // Example - C:\Users\admin\Anaconda3\envs\tensorenviron\1.jpg
+            /*
+             Comments: Images folder path: C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\imgs
+                       Python Anaconda path: C:\Users\admin\Anaconda3\envs\tensorenviron\python.exe
+                       Label_image.py script path: C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\model\label_image.py
+                       Alphabet images path to put all the A-Z images: C:\Users\admin\Anaconda3\envs\tensorenviron\categories
+
+                       Retrain our model: python retrain.py --bottleneck_dir=bottlenecks --how_many_training_steps=500 --model_dir=inception --summaries_dir=training_summaries/basic --output_graph=retrained_graph.pb --output_labels=retrained_labels.txt --image_dir=categories
+             */
+            string fileName = @"C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\model\label_image.py " + img_path;
 
             Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(@"C:\Users\Eliad\Anaconda3\Scripts\activate.bat C:\Users\Eliad\Anaconda3", fileName)
+            p.StartInfo = new ProcessStartInfo(@"C:\Users\admin\Anaconda3\envs\tensorenviron\python.exe", fileName)
             {
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
@@ -440,15 +447,17 @@ namespace KinectDrawing
             };
             p.Start();
 
-            string output = p.StandardOutput.ReadToEnd();
+            char letter = p.StandardOutput.ReadToEnd().Split(new[] { '\r', '\n' }).FirstOrDefault()[0];
             p.WaitForExit();
+
+            MessageBox.Show("The Letter is: " + letter.ToString().ToUpper());
 
             //compare to level's letter.
             char levelLetter = currentLevel.getLetter();
-            if (levelLetter.Equals(output))
+            if (levelLetter.Equals(letter))
                 return true;
-            return false;
 
+            return false;
         }
 
         private void nextLevel()
