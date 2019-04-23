@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using KinectDrawing.Sounds;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -17,11 +18,17 @@ namespace KinectDrawing
     /// <summary>
     /// Interaction logic for Menu.xaml
     /// </summary>
+
     public partial class Menu : Window
     {
+        private Sounds.Sounds s;
+
         public Menu()
         {
             InitializeComponent();
+
+            s = new Sounds.Sounds();
+            s.playOpeningSound();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

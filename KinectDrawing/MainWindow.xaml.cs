@@ -19,8 +19,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using KinectDrawing.Game;
+using KinectDrawing.Sounds;
 using KinectDrawing.Game.LevelClasses;
-
 using Microsoft.Samples.Kinect.SpeechBasics;
 using System.Speech.Recognition;
 using System.Speech.AudioFormat;
@@ -61,13 +61,13 @@ namespace KinectDrawing
 
         private LevelNode currentLevel;
 
-        private System.Media.SoundPlayer player;
+        private Sounds.Sounds s;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            this.player = new System.Media.SoundPlayer();
+            s = new Sounds.Sounds();
 
             _sensor = KinectSensor.GetDefault();
 
@@ -397,18 +397,6 @@ namespace KinectDrawing
             Console.ReadLine();
         }
 
-        private void playCorrectVoice()
-        {
-            this.player.SoundLocation = @"C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\sounds\correct.wav";
-            this.player.Play();
-        }
-
-        private void playNotCorrectVoice()
-        {
-            this.player.SoundLocation = @"C:\Users\admin\Downloads\bell.wav";
-            this.player.Play();
-        }
-
         private void Export_Trail(Object sender, RoutedEventArgs e)
         {
             Polyline newTrain = trail;
@@ -427,12 +415,12 @@ namespace KinectDrawing
                 encoder.Save(file);
                 if (isPaintingCorrect(img_name))  //Correct !
                 {
-                    playCorrectVoice(); // When the kid answer is correct
+                    this.s.playCorrectVoice(); // When the kid answer is correct
                     nextLevel();
                 }
                 else
                 {
-                    playNotCorrectVoice(); // When the kid answer is incorrect
+                    this.s.playNotCorrectVoice(); // When the kid answer is incorrect
                     lbl.Text = "Incorrect!! try again please";
                     restart();
                 }
