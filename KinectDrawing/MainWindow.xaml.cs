@@ -61,10 +61,14 @@ namespace KinectDrawing
 
         private LevelNode currentLevel;
 
+        private System.Media.SoundPlayer player;
+
         public MainWindow()
         {
             InitializeComponent();
-           
+
+            this.player = new System.Media.SoundPlayer();
+
             _sensor = KinectSensor.GetDefault();
 
             if (_sensor != null)
@@ -393,6 +397,17 @@ namespace KinectDrawing
             Console.ReadLine();
         }
 
+        private void playCorrectVoice()
+        {
+            this.player.SoundLocation = @"C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\sounds\correct.wav";
+            this.player.Play();
+        }
+
+        private void playNotCorrectVoice()
+        {
+            this.player.SoundLocation = @"C:\Users\admin\Downloads\bell.wav";
+            this.player.Play();
+        }
 
         private void Export_Trail(Object sender, RoutedEventArgs e)
         {
@@ -409,13 +424,15 @@ namespace KinectDrawing
             string img_name = @"C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\imgs\imgs" + img_num++ + ".jpg";
             using (var file = File.OpenWrite(img_name))
             {
-                //encoder.Save(file);
+                encoder.Save(file);
                 if (isPaintingCorrect(img_name))  //Correct !
                 {
+                    playCorrectVoice(); // When the kid answer is correct
                     nextLevel();
                 }
                 else
                 {
+                    playNotCorrectVoice(); // When the kid answer is incorrect
                     lbl.Text = "Incorrect!! try again please";
                     restart();
                 }
