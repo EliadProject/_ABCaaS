@@ -22,8 +22,9 @@ using KinectDrawing.Game;
 using KinectDrawing.Sounds;
 using KinectDrawing.Game.LevelClasses;
 using Microsoft.Samples.Kinect.SpeechBasics;
-using System.Speech.Recognition;
-using System.Speech.AudioFormat;
+using Microsoft.Speech.Recognition;
+using Microsoft.Speech.AudioFormat;
+using Path = System.IO.Path;
 
 namespace KinectDrawing
 {
@@ -118,6 +119,7 @@ namespace KinectDrawing
             try
             {
                 recognizers = SpeechRecognitionEngine.InstalledRecognizers();
+
             }
             catch (COMException)
             {
@@ -143,7 +145,7 @@ namespace KinectDrawing
         /// <param name="e">event arguments</param>
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Winows loadded");
+            SpeechRecognitionEngine.InstalledRecognizers();
             // Only one sensor is supported
             this._sensor = KinectSensor.GetDefault();
             if (this._sensor != null)
@@ -227,23 +229,7 @@ namespace KinectDrawing
                 {
                     case "Check":
                         {
-                            Polyline newTrain = trail;
-                            newTrain.Measure(new Size(200, 200));
-                            newTrain.Arrange(new Rect(new Size(1200, 800)));
-
-                            RenderTargetBitmap RTbmap = new RenderTargetBitmap(_width, _height, 96.0, 96.0, PixelFormats.Default);
-                            RTbmap.Render(newTrain);
-
-                            var encoder = new PngBitmapEncoder();
-                            encoder.Frames.Add(BitmapFrame.Create(RTbmap));
-
-                            string img_name = "../../imgs" + img_num++ + ".jpg";
-                            using (var file = File.OpenWrite(img_name))
-                            {
-                                encoder.Save(file);
-                                runPythonRetrain(img_name);
-                            }
-                            MessageBox.Show("Mazel Tov!");
+                            predict();
                             break;
                             
                         }
@@ -396,8 +382,7 @@ namespace KinectDrawing
 
             Console.ReadLine();
         }
-
-        private void Export_Trail(Object sender, RoutedEventArgs e)
+        private void predict()
         {
             Polyline newTrain = trail;
             newTrain.Measure(new Size(200, 200));
@@ -409,7 +394,7 @@ namespace KinectDrawing
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(RTbmap));
 
-            string img_name = @"C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\imgs\imgs" + img_num++ + ".jpg";
+            string img_name = Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory())) + @"\imgs\imgs" + img_num++ + @".jpg";
             using (var file = File.OpenWrite(img_name))
             {
                 encoder.Save(file);
@@ -427,7 +412,12 @@ namespace KinectDrawing
 
 
             }
+        }
 
+        private void Export_Trail(Object sender, RoutedEventArgs e)
+        {
+
+            predict();
         }
 
 
@@ -441,7 +431,7 @@ namespace KinectDrawing
 
                        Retrain our model: python retrain.py --bottleneck_dir=bottlenecks --how_many_training_steps=500 --model_dir=inception --summaries_dir=training_summaries/basic --output_graph=retrained_graph.pb --output_labels=retrained_labels.txt --image_dir=categories
              */
-            string fileName = @"C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\model\label_image.py " + img_path;
+            string fileName = root_path + @"model\label_image.py " + img_path;
 
             Process p = new Process();
             p.StartInfo = new ProcessStartInfo(@"C:\Users\admin\Anaconda3\envs\tensorenviron\python.exe", fileName)

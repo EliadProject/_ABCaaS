@@ -13,7 +13,7 @@
 
 
     <Grid>
-        <control:GameLevelBase SetText="level1" />
+        <control:GameLevelBase SetText="level1" Loaded="GameLevelBase_Loaded" />
         </Grid>
     
 </Window>

@@ -21,7 +21,7 @@
             <TextBox x:Name="LevelLbl" HorizontalAlignment="Left" Height="23" Margin="-144,9,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" />
         
             
-            <Image Name="camera" Opacity="0.3"/>
+            <Image Name="camera"/>
             <Canvas Name="canvas">
                 <local:DrawingBrush x:Name="brush" Width="100" Height="100" />
                 <Polyline Name="trail" Stroke="Blue" StrokeThickness="10">

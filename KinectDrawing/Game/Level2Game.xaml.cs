@@ -28,7 +28,10 @@ namespace KinectDrawing
             
             
         }
-        
-        
+
+        private void GameLevelBase_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
