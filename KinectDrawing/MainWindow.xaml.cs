@@ -174,7 +174,7 @@ namespace KinectDrawing
                 this.speechEngine = new SpeechRecognitionEngine(ri.Id);
                   var commands = new Choices();
 
-                //define the vocabelery of the commands
+                //define the vocabelery of the commfpytands
                   commands.Add(new SemanticResultValue("check result", "Check"));
                 commands.Add(new SemanticResultValue("check", "Check"));
                 commands.Add(new SemanticResultValue("checks result", "Check"));
@@ -363,7 +363,7 @@ namespace KinectDrawing
         
         private void runPythonRetrain(string img_path)
         {
-            string fileName = @"C:\Users\admin\Anaconda3\envs\tensorenviron\label_image.py " + img_path;
+            string fileName = @"C:\Anaconda3\envs\tensorenviron\label_image.py " + img_path;
             // Example - C:\Users\admin\Anaconda3\envs\tensorenviron\1.jpg
 
             Process p = new Process();
@@ -394,10 +394,11 @@ namespace KinectDrawing
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(RTbmap));
 
-            string img_name = Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory())) + @"\imgs\imgs" + img_num++ + @".jpg";
+            string img_name = @"images\imgs" + img_num++ + @".jpg";
             using (var file = File.OpenWrite(img_name))
             {
                 encoder.Save(file);
+                file.Close();
                 if (isPaintingCorrect(img_name))  //Correct !
                 {
                     this.s.playCorrectVoice(); // When the kid answer is correct
@@ -431,10 +432,10 @@ namespace KinectDrawing
 
                        Retrain our model: python retrain.py --bottleneck_dir=bottlenecks --how_many_training_steps=500 --model_dir=inception --summaries_dir=training_summaries/basic --output_graph=retrained_graph.pb --output_labels=retrained_labels.txt --image_dir=categories
              */
-            string fileName = root_path + @"model\label_image.py " + img_path;
+            string fileName = @"label_image.py " + img_path;// img_path;
 
             Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(@"C:\Users\admin\Anaconda3\envs\tensorenviron\python.exe", fileName)
+            p.StartInfo = new ProcessStartInfo(@"C:\Anaconda3\envs\tensorenviron\python.exe", fileName)
             {
                 RedirectStandardOutput = true,
                 UseShellExecute = false,

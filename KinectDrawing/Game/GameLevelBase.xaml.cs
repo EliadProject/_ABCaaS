@@ -175,7 +175,7 @@ namespace KinectDrawing
             // Example - C:\Users\admin\Anaconda3\envs\tensorenviron\1.jpg
 
             Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(@"C:\Users\Eliad\Anaconda3\Scripts\activate.bat C:\Users\Eliad\Anaconda3", fileName)
+            p.StartInfo = new ProcessStartInfo(@"C:\Anaconda3\Scripts\activate.bat C:\Users\Eliad\Anaconda3", fileName)
             {
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
