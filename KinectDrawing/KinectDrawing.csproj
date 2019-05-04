@@ -101,7 +101,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MachineLearning.cs" />
     <Compile Include="Sounds\Sounds.cs" />
+    <Compile Include="SpeechRecognition.cs" />
     <Page Include="DrawingBrush.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -171,7 +173,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="bin\Debug\KinectDrawing.exe.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -183,8 +184,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\KinectDrawing.exe" />
-    <Content Include="bin\Debug\KinectDrawing.pdb" />
     <Content Include="Kinect20.Fusion.dll" />
     <Resource Include="images\add.png" />
     <Resource Include="images\bg.png" />
@@ -206,7 +205,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\Release\" />
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
