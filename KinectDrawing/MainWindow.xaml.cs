@@ -50,26 +50,23 @@ namespace KinectDrawing
 
         private static int img_num = 1;
         private static string root_path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        /// <summary>
-        /// Stream for 32b-16b conversion.
-        /// </summary>
-        private KinectAudioStream convertStream = null;
 
-        /// <summary>
-        /// Speech recognition engine using audio data from Kinect.
-        /// </summary>
         private SpeechRecognitionEngine speechEngine = null;
+        private Sounds.Sounds s;
 
         private LevelNode currentLevel;
 
-        private Sounds.Sounds s;
-
+       
         public MainWindow()
         {
-            InitializeComponent();
-
             s = new Sounds.Sounds();
 
+            InitializeComponent();
+
+            this.speechEngine = SpeechRecognition.init();
+            this.speechEngine.SpeechRecognized += this.SpeechRecognized;
+            
+           
             _sensor = KinectSensor.GetDefault();
 
             if (_sensor != null)
@@ -101,43 +98,9 @@ namespace KinectDrawing
 
         private void changeLetter()
         {
-            LevelLbl.Text = "Letter: " + currentLevel.getLetter();
+            LevelLbl.Content= "Letter: " + currentLevel.getLetter();
         }
-        /// <summary>
-        /// Gets the metadata for the speech recognizer (acoustic model) most suitable to
-        /// process audio from Kinect device.
-        /// </summary>
-        /// <returns>
-        /// RecognizerInfo if found, <code>null</code> otherwise.
-        /// </returns>
-        private static RecognizerInfo TryGetKinectRecognizer()
-        {
-            IEnumerable<RecognizerInfo> recognizers;
-           
-            // This is required to catch the case when an expected recognizer is not installed.
-            // By default - the x86 Speech Runtime is always expected. 
-            try
-            {
-                recognizers = SpeechRecognitionEngine.InstalledRecognizers();
-
-            }
-            catch (COMException)
-            {
-                return null;
-            }
-
-            foreach (RecognizerInfo recognizer in recognizers)
-            {
-                string value;
-                recognizer.AdditionalInfo.TryGetValue("Kinect", out value);
-                if ("True".Equals(value, StringComparison.OrdinalIgnoreCase) && "en-US".Equals(recognizer.Culture.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    return recognizer;
-                }
-            }
-
-            return null;
-        }
+        
         /// <summary>
         /// Execute initialization tasks.
         /// </summary>
@@ -145,71 +108,7 @@ namespace KinectDrawing
         /// <param name="e">event arguments</param>
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            SpeechRecognitionEngine.InstalledRecognizers();
-            // Only one sensor is supported
-            this._sensor = KinectSensor.GetDefault();
-            if (this._sensor != null)
-            {
-                // open the sensor
-                this._sensor.Open();
-
-                // grab the audio stream
-                IReadOnlyList<AudioBeam> audioBeamList = this._sensor.AudioSource.AudioBeams;
-                System.IO.Stream audioStream = audioBeamList[0].OpenInputStream();
-
-                // create the convert stream
-                this.convertStream = new KinectAudioStream(audioStream);
-            }
-            else
-            {
-                // on failure, set the status text
-                  MessageBox.Show("Error1");
-            
-                return;
-            }
-
-            RecognizerInfo ri = TryGetKinectRecognizer();
-            if (null != ri)
-            {
-                this.speechEngine = new SpeechRecognitionEngine(ri.Id);
-                  var commands = new Choices();
-
-                //define the vocabelery of the commfpytands
-                  commands.Add(new SemanticResultValue("check result", "Check"));
-                commands.Add(new SemanticResultValue("check", "Check"));
-                commands.Add(new SemanticResultValue("checks result", "Check"));
-                commands.Add(new SemanticResultValue("Erase Screen", "Erase"));
-                commands.Add(new SemanticResultValue("Erase", "Erase"));
-                commands.Add(new SemanticResultValue("Erases", "Erase"));
-                commands.Add(new SemanticResultValue("toggles", "Toggle"));
-                  commands.Add(new SemanticResultValue("Toggle", "Toggle"));
-                
-                  var gb = new GrammarBuilder { Culture = ri.Culture };
-                  gb.Append(commands);
-                 
-                  var g = new Grammar(gb);
-
-               this.speechEngine.LoadGrammar(g);
-                
-
-                this.speechEngine.SpeechRecognized += this.SpeechRecognized;
-                
-
-                // let the convertStream know speech is going active
-                this.convertStream.SpeechActive = true;
-
-                // For long recognition sessions (a few hours or more), it may be beneficial to turn off adaptation of the acoustic model. 
-                // This will prevent recognition accuracy from degrading over time.
-                ////speechEngine.UpdateRecognizerSetting("AdaptationOn", 0);
-
-                this.speechEngine.SetInputToAudioStream(
-                    this.convertStream, new SpeechAudioFormatInfo(EncodingFormat.Pcm, 16000, 16, 1, 32000, 2, null));
-                this.speechEngine.RecognizeAsync(RecognizeMode.Multiple);
-            }
-            else
-            {
-                
-            }
+           
         }
         /// <summary>
         /// Handler for recognized speech events.
@@ -217,33 +116,7 @@ namespace KinectDrawing
         /// <param name="sender">object sending the event.</param>
         /// <param name="e">event arguments.</param>
         //Do 
-        private void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
-        {
-            // Speech utterance confidence below which we treat speech as if it hadn't been heard
-            const double ConfidenceThreshold = 0.3;
-
-            if (e.Result.Confidence >= ConfidenceThreshold)
-            {
-                //check the speech to the commands
-                switch (e.Result.Semantics.Value.ToString())
-                {
-                    case "Check":
-                        {
-                            predict();
-                            break;
-                            
-                        }
-                    case "Erase":
-                        trail.Points.Clear();
-                        MessageBox.Show("Erase your mind");
-                        break;
-                    case "Toggle":
-                        isDrawing = !isDrawing;
-                        MessageBox.Show("Toggle your self");
-                        break;
-                }
-            }
-        }
+       
         /// <summary>
         /// Execute un-initialization tasks.
         /// </summary>
@@ -265,16 +138,10 @@ namespace KinectDrawing
             {
                 _sensor.Close();
             }
-            if (null != this.convertStream)
-            {
-                this.convertStream.SpeechActive = false;
-            }
 
-            if (null != this.speechEngine)
-            {
-                
-                this.speechEngine.RecognizeAsyncStop();
-            }
+
+            SpeechRecognition.close();
+           
 
             
         }
@@ -382,8 +249,11 @@ namespace KinectDrawing
 
             Console.ReadLine();
         }
-        private void predict()
-        {
+         public void predict()
+        { 
+
+            
+            //exporting trail
             Polyline newTrain = trail;
             newTrain.Measure(new Size(200, 200));
             newTrain.Arrange(new Rect(new Size(1200, 800)));
@@ -401,14 +271,12 @@ namespace KinectDrawing
                 file.Close();
                 if (isPaintingCorrect(img_name))  //Correct !
                 {
-                    this.s.playCorrectVoice(); // When the kid answer is correct
                     nextLevel();
                 }
                 else
                 {
-                    this.s.playNotCorrectVoice(); // When the kid answer is incorrect
-                    lbl.Text = "Incorrect!! try again please";
-                    restart();
+                   
+                    failAndRestart();
                 }
 
 
@@ -424,41 +292,52 @@ namespace KinectDrawing
 
         private bool isPaintingCorrect(string img_path)
         {
-            /*
-             Comments: Images folder path: C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\imgs
-                       Python Anaconda path: C:\Users\admin\Anaconda3\envs\tensorenviron\python.exe
-                       Label_image.py script path: C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\model\label_image.py
-                       Alphabet images path to put all the A-Z images: C:\Users\admin\Anaconda3\envs\tensorenviron\categories
 
-                       Retrain our model: python retrain.py --bottleneck_dir=bottlenecks --how_many_training_steps=500 --model_dir=inception --summaries_dir=training_summaries/basic --output_graph=retrained_graph.pb --output_labels=retrained_labels.txt --image_dir=categories
-             */
-            string fileName = @"label_image.py " + img_path;// img_path;
-
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(@"C:\Anaconda3\envs\tensorenviron\python.exe", fileName)
-            {
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-            p.Start();
-
-            char letter = p.StandardOutput.ReadToEnd().Split(new[] { '\r', '\n' }).FirstOrDefault()[0];
-            p.WaitForExit();
-
-            MessageBox.Show("The Letter is: " + letter.ToString().ToUpper());
+            char predictLetter = MachineLearning.predict(img_path);
+            MessageBox.Show("The Letter is: " + predictLetter.ToString().ToUpper());
 
             //compare to level's letter.
             char levelLetter = currentLevel.getLetter();
-            if (levelLetter.Equals(letter))
+            if (levelLetter.Equals(predictLetter))
                 return true;
 
             return false;
         }
 
+         public void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        {
+            // Speech utterance confidence below which we treat speech as if it hadn't been heard
+            const double ConfidenceThreshold = 0.3;
+
+            if (e.Result.Confidence >= ConfidenceThreshold)
+            {
+                //check the speech to the commands
+                switch (e.Result.Semantics.Value.ToString())
+                {
+                    case "Check":
+                        {
+                            predict();
+                            break;
+                        }
+                    case "Erase":
+
+                        //erase points
+                        trail.Points.Clear();
+
+                        break;
+                    case "Toggle":
+                        isDrawing = !isDrawing;
+
+                        break;
+                }
+            }
+        }
+
+
         private void nextLevel()
         {
             //Good animation
+            this.s.playCorrectVoice(); // When the kid answer is correct
             currentLevel = currentLevel.next;
             changeLetter();
             restart();
@@ -467,6 +346,8 @@ namespace KinectDrawing
         private void failAndRestart()
         {
             //Fail animation
+            this.s.playNotCorrectVoice(); // When the kid answer is incorrect
+            statusLbl.Content = "Incorrect!! try again please";
             restart();
         }
         private void restart()
