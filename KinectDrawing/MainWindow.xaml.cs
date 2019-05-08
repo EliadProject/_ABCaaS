@@ -6,25 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ComponentModel;
 using KinectDrawing.Game;
-using KinectDrawing.Sounds;
 using KinectDrawing.Game.LevelClasses;
-using Microsoft.Samples.Kinect.SpeechBasics;
 using Microsoft.Speech.Recognition;
-using Microsoft.Speech.AudioFormat;
-using Path = System.IO.Path;
 
 namespace KinectDrawing
 {
@@ -55,8 +44,10 @@ namespace KinectDrawing
         private Sounds.Sounds s;
 
         private LevelNode currentLevel;
+        private int sectionLevel;
+        private int levelIndex;
 
-       
+
         public MainWindow()
         {
             s = new Sounds.Sounds();
@@ -89,16 +80,22 @@ namespace KinectDrawing
 
                 camera.Source = _bitmap;
 
-                //Init GameFlow
-                currentLevel = GameFlow.createGameFlow();
-                changeLetter();
-
             }
+
+            //Init GameFlow
+            currentLevel = GameFlow.createGameFlow();
+            sectionLevel = 1;
+            levelIndex = 0;
+
+            updateLettersOnScreen();
         }
 
-        private void changeLetter()
+        
+
+        private void updateLettersOnScreen()
         {
-            LevelLbl.Content= "Letter: " + currentLevel.getLetter();
+
+            LevelLbl.Content = currentLevel.letters.ToString(); 
         }
         
         /// <summary>
@@ -138,12 +135,7 @@ namespace KinectDrawing
             {
                 _sensor.Close();
             }
-
-
             SpeechRecognition.close();
-           
-
-            
         }
 
         private void ColorReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
@@ -208,7 +200,6 @@ namespace KinectDrawing
                             }
                             Canvas.SetLeft(brush, newPoint.X - brush.Width / 2.0);
                             Canvas.SetTop(brush, newPoint.Y - brush.Height);
-
                         }
 
                     }
@@ -250,9 +241,7 @@ namespace KinectDrawing
             Console.ReadLine();
         }
          public void predict()
-        { 
-
-            
+        {  
             //exporting trail
             Polyline newTrain = trail;
             newTrain.Measure(new Size(200, 200));
@@ -271,25 +260,37 @@ namespace KinectDrawing
                 file.Close();
                 if (isPaintingCorrect(img_name))  //Correct !
                 {
-                    nextLevel();
+                    handleSuccessPredict();
                 }
                 else
                 {
-                   
                     failAndRestart();
                 }
 
 
             }
         }
+        /// <summary>
+        /// method thats determine how to continue with the game
+        /// </summary>
+        private void handleSuccessPredict()
+        {
+            if(levelIndex>=currentLevel.letters.Length)
+            {
+                //the current level is finish
+                nextLevel();
+            }
+            else
+            {
+                //not finished level - move to next letter
+                levelIndex++;
+            }
+        }
 
         private void Export_Trail(Object sender, RoutedEventArgs e)
         {
-
             predict();
         }
-
-
         private bool isPaintingCorrect(string img_path)
         {
 
@@ -297,11 +298,16 @@ namespace KinectDrawing
             MessageBox.Show("The Letter is: " + predictLetter.ToString().ToUpper());
 
             //compare to level's letter.
-            char levelLetter = currentLevel.getLetter();
+            char levelLetter = getLetter();
             if (levelLetter.Equals(predictLetter))
                 return true;
 
             return false;
+        }
+
+        private char getLetter()
+        {
+            return currentLevel.letters[levelIndex];
         }
 
          public void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
@@ -315,19 +321,14 @@ namespace KinectDrawing
                 switch (e.Result.Semantics.Value.ToString())
                 {
                     case "Check":
-                        {
                             predict();
                             break;
-                        }
                     case "Erase":
-
                         //erase points
                         trail.Points.Clear();
-
                         break;
                     case "Toggle":
                         isDrawing = !isDrawing;
-
                         break;
                 }
             }
@@ -337,10 +338,11 @@ namespace KinectDrawing
         private void nextLevel()
         {
             //Good animation
+
             this.s.playCorrectVoice(); // When the kid answer is correct
             currentLevel = currentLevel.next;
-            changeLetter();
-            restart();
+            updateLettersOnScreen(); //update screen
+            restart(); //erase painting
         }
 
         private void failAndRestart()

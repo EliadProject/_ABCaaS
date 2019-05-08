@@ -6,33 +6,37 @@ using System.Threading.Tasks;
 
 namespace KinectDrawing.Game.LevelClasses
 {
-    class LevelsLinkedList
+    class Level1LinkedList
     {
         private LevelNode head; // the first node
-        private LevelNode currentNode; //the last node in the list
-        public LevelsLinkedList(LevelNode levelNode)
+        private LevelNode tail; //the last node in the list
+        public Level1LinkedList(LevelNode levelNode)
         {
-            this.head= levelNode;
+            this.head = new LetterLevelNode();
+            this.head.le = letter;
+            this.head.letter = letter;
             currentNode = head;
         }
-
+       
         public LevelNode getHead()
         {
             return head;
         }
         public void printAllNodes()
         {
-            LevelNode current = head;
+            LetterLevelNode current = head;
             while (current != null)
             {
-                Console.WriteLine(current.ToString());
+                Console.WriteLine(current.letter);
                 current = current.next;
             }
         }
 
-        public void AddToLast(LevelNode levelNode)
+        public void AddToLast(char letter)
         {
-            currentNode.next = levelNode;
+            LetterLevelNode toAdd = new LetterLevelNode();
+            toAdd.letter = letter;
+            currentNode.next = toAdd;
             currentNode = currentNode.next;
         }
     }
