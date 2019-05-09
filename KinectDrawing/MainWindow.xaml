@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KinectDrawing"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
         Title="KINECT Drawing" Height="350" Width="525"
         WindowState="Maximized"
@@ -11,16 +12,15 @@
         Loaded="WindowLoaded"
         Closing="Window_Closing">
     <Viewbox>
-        
+
         <Grid Width="1600" Height="700">
             <Button x:Name="Erase" Height="80" Width="150" Content="Erase Color" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,10,10,10" Click="Erase_Click" Canvas.ZIndex="2"/>
             <Button x:Name="ToggleDrawing" Height="80" Width="150" Content="Toggle Drawing" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,114" Click="Toggle_Click" Canvas.ZIndex="2"/>
             <Button x:Name="ExportTrail" Height="80" Width="150" Content="Export Trail" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,214" Click="Export_Trail" Canvas.ZIndex="2"/>
 
-            <Label x:Name="statusLbl" Content="" Canvas.Left="572" Canvas.Top="384"/>
-            <Label x:Name="LevelLbl" HorizontalAlignment="Left" Height="23" Margin="23,106,0,0" VerticalAlignment="Top" Width="120" />
-        
-            
+            <Label x:Name="statusLbl" Foreground="Azure" Content="" Canvas.Left="572" Canvas.Top="384"/>
+            <Label x:Name="LevelLbl" Foreground="Azure" HorizontalAlignment="Left" Height="23" Margin="23,106,0,0" VerticalAlignment="Top" Width="120" />
+
             <Image Name="camera"/>
             <Canvas Name="canvas">
                 <local:DrawingBrush x:Name="brush" Width="100" Height="100" />
@@ -29,9 +29,11 @@
                         <BlurEffect Radius="5" />
                     </Polyline.Effect>
                 </Polyline>
+                <Image x:Name="Animated"  HorizontalAlignment="Left" Height="511" VerticalAlignment="Top" Width="634" Canvas.Left="718" Canvas.Top="-14"/>
+
             </Canvas>
-            
+
         </Grid>
-       
+
     </Viewbox>
 </Window>

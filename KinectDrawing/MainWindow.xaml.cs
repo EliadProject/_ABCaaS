@@ -25,6 +25,9 @@ using Microsoft.Samples.Kinect.SpeechBasics;
 using Microsoft.Speech.Recognition;
 using Microsoft.Speech.AudioFormat;
 using Path = System.IO.Path;
+using WpfAnimatedGif;
+using System.Windows.Media.Animation;
+using System.Configuration;
 
 namespace KinectDrawing
 {
@@ -346,6 +349,15 @@ namespace KinectDrawing
         private void failAndRestart()
         {
             //Fail animation
+            var uri = ConfigurationManager.AppSettings["AnimateFailURI"];
+            var image = new BitmapImage();
+            image.BeginInit();
+            image.UriSource = new Uri(uri, UriKind.Relative);
+            image.EndInit();
+            ImageBehavior.SetAnimatedSource(Animated, image);
+            //Repeat 10 times
+            ImageBehavior.SetRepeatBehavior(Animated, new RepeatBehavior(10));
+
             this.s.playNotCorrectVoice(); // When the kid answer is incorrect
             statusLbl.Content = "Incorrect!! try again please";
             restart();
