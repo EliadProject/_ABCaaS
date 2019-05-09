@@ -11,9 +11,9 @@
             <ImageBrush ImageSource="images\bg.png"/>
         </Grid.Background>
 
-        <Image Height="138" Margin="388,-5,404,350" Source="images\logo.png"/>
+        <Image Margin="325,0,343,335" Source="images\logo.png"/>
 
-        <Image Height="507" Margin="387,-125,405,101" Source="images\slogen.png"/>
+        <Image Margin="339,-123,358,34" Source="images\slogen.png"/>
 
         <Button Content=""
                 BorderThickness="0"
@@ -66,18 +66,18 @@
                 Height="60"
                 Click="Button_Click"
                 Style="{StaticResource MyButton}">
-           
+
             <Button.Background>
                 <ImageBrush ImageSource="images\settings.png"/>
             </Button.Background>
         </Button>
 
-        
-       
-        
+
+
+
     </Grid>
 
-   
+
 </Window>
     
     
