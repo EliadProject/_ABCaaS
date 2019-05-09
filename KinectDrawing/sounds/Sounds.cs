@@ -20,7 +20,7 @@ namespace KinectDrawing.Sounds
 
         public void playCorrectVoice()
         {
-            this.player.SoundLocation = this.PathProject + @"sounds\goodjob.wav";
+            this.player.SoundLocation = this.PathProject + @"\sounds\goodjob.wav";
             this.player.Play();
         }
 
