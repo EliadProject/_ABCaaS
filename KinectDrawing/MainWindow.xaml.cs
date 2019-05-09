@@ -297,11 +297,12 @@ namespace KinectDrawing
         {
 
             char predictLetter = MachineLearning.predict(img_path);
-            MessageBox.Show("The Letter is: " + predictLetter.ToString().ToUpper());
+            //MessageBox.Show("The Letter is: " + predictLetter.ToString().ToUpper());
 
             //compare to level's letter.
-            char levelLetter = currentLevel.getLetter();
-            if (levelLetter.Equals(predictLetter))
+            string levelLetter = currentLevel.getLetter().ToString();
+            string chr = predictLetter.ToString().ToUpper();
+            if (levelLetter.Equals(chr))
                 return true;
 
             return false;
