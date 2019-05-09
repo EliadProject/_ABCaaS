@@ -340,16 +340,17 @@ namespace KinectDrawing
         private void nextLevel()
         {
             //Good animation
+            Animation("AnimationSuccess");
+
             this.s.playCorrectVoice(); // When the kid answer is correct
             currentLevel = currentLevel.next;
             changeLetter();
             restart();
         }
 
-        private void failAndRestart()
-        {
-            //Fail animation
-            var uri = ConfigurationManager.AppSettings["AnimateFailURI"];
+        private void Animation(string key) {
+            //read the URI from AppSettings
+            var uri = ConfigurationManager.AppSettings[key];
             var image = new BitmapImage();
             image.BeginInit();
             image.UriSource = new Uri(uri, UriKind.Relative);
@@ -357,6 +358,12 @@ namespace KinectDrawing
             ImageBehavior.SetAnimatedSource(Animated, image);
             //Repeat 10 times
             ImageBehavior.SetRepeatBehavior(Animated, new RepeatBehavior(10));
+        }
+
+        private void failAndRestart()
+        {
+            //Fail animation
+            Animation("AnimationFail");
 
             this.s.playNotCorrectVoice(); // When the kid answer is incorrect
             statusLbl.Content = "Incorrect!! try again please";

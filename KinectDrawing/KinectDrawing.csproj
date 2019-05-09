@@ -196,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\animations\try_again.gif" />
+    <Resource Include="images\animations\success.gif" />
     <Content Include="Kinect20.Fusion.dll" />
     <Resource Include="images\add.png" />
     <Resource Include="images\bg.png" />
