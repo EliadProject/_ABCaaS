@@ -53,8 +53,8 @@ namespace KinectDrawing
 
                 //define the vocabelery of the commfpytands
                 commands.Add(new SemanticResultValue("check result", "Check"));
-               
                 commands.Add(new SemanticResultValue("checks result", "Check"));
+
                 commands.Add(new SemanticResultValue("Erase Screen", "Erase"));
                 
                
