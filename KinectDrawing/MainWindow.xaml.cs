@@ -66,8 +66,8 @@ namespace KinectDrawing
 
             InitializeComponent();
 
-            this.speechEngine = SpeechRecognition.init();
-            this.speechEngine.SpeechRecognized += this.SpeechRecognized;
+            //this.speechEngine = SpeechRecognition.init();
+            //this.speechEngine.SpeechRecognized += this.SpeechRecognized;
             
            
             _sensor = KinectSensor.GetDefault();
