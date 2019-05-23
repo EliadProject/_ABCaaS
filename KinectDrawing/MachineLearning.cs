@@ -22,7 +22,8 @@ namespace KinectDrawing
             string fileName = @"label_image.py " + img_path;// img_path;
 
             Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(@"C:\Anaconda3\envs\tensorenviron\python.exe", fileName)
+            // edit the path of your own anaconda
+            p.StartInfo = new ProcessStartInfo(@"C:\Users\tamir\Anaconda3\envs\tensorflow\python.exe", fileName)
             {
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
