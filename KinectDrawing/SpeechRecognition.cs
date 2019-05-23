@@ -58,8 +58,8 @@ namespace KinectDrawing
                 commands.Add(new SemanticResultValue("Erase Screen", "Erase"));
                 
                
-                commands.Add(new SemanticResultValue("start draw", "Start"));
-                commands.Add(new SemanticResultValue("stop draw", "Stop"));
+                commands.Add(new SemanticResultValue("start", "Start"));
+                commands.Add(new SemanticResultValue("stop", "Stop"));
 
                 var gb = new GrammarBuilder { Culture = ri.Culture };
                 gb.Append(commands);
