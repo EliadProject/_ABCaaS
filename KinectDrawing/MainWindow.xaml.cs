@@ -327,11 +327,16 @@ namespace KinectDrawing
 
                         //erase points
                         trail.Points.Clear();
-
                         break;
-                    case "Toggle":
-                        isDrawing = !isDrawing;
 
+                    case "Stop":
+                        //turn off the drawing
+                        isDrawing = !isDrawing;
+                        break;
+
+                    case "Start":
+                        //turn on the drawing
+                        isDrawing = !isDrawing;
                         break;
                 }
             }
