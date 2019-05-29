@@ -22,7 +22,7 @@ namespace KinectDrawing
     public partial class Menu : Window
     {
         private Sounds.Sounds s;
-
+        private bool isRightHand;
         public Menu()
         {
             InitializeComponent();
@@ -34,7 +34,7 @@ namespace KinectDrawing
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Menu menuWindow = new Menu();
-            MainWindow mainWindow = new MainWindow();
+            MainWindow mainWindow = new MainWindow(isRightHand);
             mainWindow.Show();
             menuWindow.Hide();
             menuWindow.Close();
@@ -45,5 +45,16 @@ namespace KinectDrawing
             System.Windows.Application.Current.Shutdown();
         }
 
+       
+
+        private void right_hand_check(object sender, RoutedEventArgs e)
+        {
+            isRightHand = true;
+        }
+
+        private void left_hand_check(object sender, RoutedEventArgs e)
+        {
+            isRightHand = false;
+        }
     }
 }

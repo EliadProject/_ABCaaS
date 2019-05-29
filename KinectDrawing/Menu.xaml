@@ -57,22 +57,38 @@
             </Button.Background>
         </Button>
 
-        <Button Content=""
-                BorderThickness="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="26,389,0,0"
-                Width="60"
-                Height="60"
-                Click="Button_Click"
-                Style="{StaticResource MyButton}">
-
-            <Button.Background>
-                <ImageBrush ImageSource="images\settings.png"/>
-            </Button.Background>
-        </Button>
 
 
+
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <StackPanel.Resources>
+                <Style x:Key="Flag" TargetType="RadioButton">
+                    <Style.Triggers>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </Style.Triggers>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="RadioButton">
+                                <Border >
+                                    <Image Source="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </StackPanel.Resources>
+            <ItemsControl Height="160" Width="320" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,300,0,0" Padding="0,0,40,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <DockPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <RadioButton GroupName="hand" Content="images\left_hand.png" Style="{StaticResource Flag}" Width="140" Height="100" Checked="left_hand_check" />
+                <RadioButton GroupName="hand" Content="images\right_hand.png" Style="{StaticResource Flag}" IsChecked="True"  Width="140" Height="100" Checked="right_hand_check" />
+            </ItemsControl>
+        </StackPanel>
 
 
     </Grid>

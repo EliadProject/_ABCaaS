@@ -59,9 +59,11 @@ namespace KinectDrawing
 
         private LevelNode currentLevel;
 
-       
-        public MainWindow()
+        private bool isRightHand;
+        public MainWindow(bool isRightHand)
         {
+            this.isRightHand = isRightHand;
+
             s = new Sounds.Sounds();
 
             InitializeComponent();
@@ -98,6 +100,7 @@ namespace KinectDrawing
 
             }
         }
+
 
         private void changeLetter()
         {
@@ -177,12 +180,15 @@ namespace KinectDrawing
 
                     if (body != null)
                     {
-                        Joint handRight = body.Joints[JointType.HandLeft];
+                        Joint hand;
+                        if (isRightHand )
+                            hand = body.Joints[JointType.HandRight];
+                        else
+                            hand = body.Joints[JointType.HandLeft];
 
-
-                        if (handRight.TrackingState != TrackingState.NotTracked)
+                        if (hand.TrackingState != TrackingState.NotTracked)
                         {
-                            CameraSpacePoint handRightPosition = handRight.Position;
+                            CameraSpacePoint handRightPosition = hand.Position;
                             ColorSpacePoint handRightPoint = _sensor.CoordinateMapper.MapCameraPointToColorSpace(handRightPosition);
 
                             float x = handRightPoint.X;
