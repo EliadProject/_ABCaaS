@@ -18,10 +18,6 @@ namespace KinectDrawing
         static private SpeechRecognitionEngine speechEngine = null;
        
 
-       
-        
-
-
         static public SpeechRecognitionEngine init()
         {
             SpeechRecognitionEngine.InstalledRecognizers();
@@ -67,10 +63,6 @@ namespace KinectDrawing
                 var g = new Grammar(gb);
 
                 speechEngine.LoadGrammar(g);
-
-
-                
-
 
                 // let the convertStream know speech is going active
                 convertStream.SpeechActive = true;
@@ -123,8 +115,6 @@ namespace KinectDrawing
 
             return null;
         }
-
-        
 
         static public void close()
         {

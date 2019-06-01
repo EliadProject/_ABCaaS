@@ -108,10 +108,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TheGame.xaml.cs">
+      <DependentUpon>TheGame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MachineLearning.cs" />
     <Compile Include="Sounds\Sounds.cs" />
     <Compile Include="SpeechRecognition.cs" />
     <Page Include="DrawingBrush.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TheGame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -199,6 +206,7 @@
     <Resource Include="images\animations\success.gif" />
     <Resource Include="images\left_hand.png" />
     <Resource Include="images\right_hand.png" />
+    <Resource Include="images\home.png" />
     <Content Include="Kinect20.Fusion.dll" />
     <Resource Include="images\add.png" />
     <Resource Include="images\bg.png" />
