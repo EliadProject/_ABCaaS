@@ -58,6 +58,7 @@ namespace KinectDrawing
         private Sounds.Sounds s;
 
         private LevelNode currentLevel;
+        private int screenWidth;
 
        
         public MainWindow()
@@ -66,10 +67,12 @@ namespace KinectDrawing
 
             InitializeComponent();
 
-            this.speechEngine = SpeechRecognition.init();
-            this.speechEngine.SpeechRecognized += this.SpeechRecognized;
-            
-           
+            this.screenWidth = getScreenSize();
+
+            //this.speechEngine = SpeechRecognition.init();
+            //this.speechEngine.SpeechRecognized += this.SpeechRecognized;
+
+
             _sensor = KinectSensor.GetDefault();
 
             if (_sensor != null)
@@ -97,6 +100,29 @@ namespace KinectDrawing
                 changeLetter();
 
             }
+        }
+
+        private int getScreenSize()
+        {
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
+            //screenWidth = screenWidth / 4;
+
+            /*Line1.X1 = screenWidth / 1.8 ;
+            Line1.X2 = screenWidth / 1.8 ;*/
+            Line1.Y1 = 0;
+            Line1.Y2 = 1020;
+            Line1.X1 = screenWidth / 4;
+            Line1.X2 = screenWidth / 4 ;
+
+            Line2.Y1 = 0;
+            Line2.Y2 = 1020;
+            Line2.X1 = screenWidth / 1.8;
+            Line2.X2 = screenWidth / 1.8;
+
+            /*Line2.X1 = screenWidth / 4 ;
+            Line2.X2 = screenWidth / 4 ;*/
+
+            return 20;
         }
 
         private void changeLetter()
@@ -252,10 +278,47 @@ namespace KinectDrawing
 
             Console.ReadLine();
         }
-         public void predict()
-        { 
+        public void splitImageByThree(RenderTargetBitmap encoder)
+        {
+            var file = @"split\full.png";
+            var output = @"split";
+            using (Stream imageStreamSource = new FileStream(
+                file, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                PngBitmapDecoder decoder = new PngBitmapDecoder(
+                    imageStreamSource,
+                    BitmapCreateOptions.PreservePixelFormat,
+                    BitmapCacheOption.Default);
+                BitmapSource bitmapSource = decoder.Frames[0];
 
-            
+                /*
+                var widthPicture = bitmapSource.PixelWidth / 3;
+                var heightPicture = bitmapSource.PixelHeight;
+                */
+
+                var widthPicture = encoder.PixelWidth;
+                var heightPicture = encoder.PixelHeight;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    CroppedBitmap croppedBitmap = new CroppedBitmap(
+                        encoder,
+                        new System.Windows.Int32Rect(i * widthPicture, 0, widthPicture, heightPicture));
+
+                    /* PngBitmapEncoder encoder = new PngBitmapEncoder(); */
+                    var frame = BitmapFrame.Create(croppedBitmap);
+                    encoder.Frames.Add(frame);
+                    var fileName = Path.Combine(output, i.ToString() + ".png");
+                    using (var stream = new FileStream(fileName, FileMode.Create))
+                    {
+                        encoder.Save(stream);
+                    }
+                }
+            }
+        }
+
+        public void predict()
+        { 
             //exporting trail
             Polyline newTrain = trail;
             newTrain.Measure(new Size(200, 200));
@@ -266,6 +329,8 @@ namespace KinectDrawing
 
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(RTbmap));
+
+            splitImageByThree(RTbmap);
 
             string img_name = @"images\imgs" + img_num++ + @".jpg";
             using (var file = File.OpenWrite(img_name))
