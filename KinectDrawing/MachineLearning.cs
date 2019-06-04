@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace KinectDrawing
 {
@@ -22,7 +24,6 @@ namespace KinectDrawing
             string fileName = @"label_image.py " + img_path;// img_path;
 
             Process p = new Process();
-            // edit the path of your own anaconda
             p.StartInfo = new ProcessStartInfo(@"C:\Users\tamir\Anaconda3\envs\tensorflow\python.exe", fileName)
             {
                 RedirectStandardOutput = true,
@@ -30,8 +31,22 @@ namespace KinectDrawing
                 CreateNoWindow = true
             };
             p.Start();
-
-            char letter = p.StandardOutput.ReadToEnd().Split(new[] { '\r', '\n' }).FirstOrDefault()[0];
+            //print the ouput of the tensorflow process
+            Debug.WriteLine(p.StandardOutput.ReadToEnd());
+            char letter = 'b';
+            try
+            {
+                 letter= p.StandardOutput.ReadToEnd().Split(new[] { '\r', '\n' }).FirstOrDefault()[0];
+            }
+            catch (IOException e)
+            {
+                // Extract some information from this exception, and then 
+                // throw it to the parent method.
+                if (e.Source != null)
+                    Console.WriteLine("IOException source: {0}", e.Source);
+                throw;
+                
+            }
             p.WaitForExit();
             return letter;
         }
