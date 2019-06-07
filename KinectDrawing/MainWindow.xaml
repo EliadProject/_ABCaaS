@@ -86,8 +86,8 @@
                         <BlurEffect Radius="5" />
                     </Polyline.Effect>
                 </Polyline>
-                <Line Grid.Column="2" Name="Line1" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" Y1="0" Y2="1020"/>
-                <Line Grid.Column="2" Name="Line2" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" Y1="0" Y2="1020" Height="1072"  />
+                <Line Grid.Column="2" Name="Line1" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" />
+                <Line Grid.Column="2" Name="Line2" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" />
 
                 <Image x:Name="Animated"  HorizontalAlignment="Left" Height="511" VerticalAlignment="Top" Width="634" Canvas.Left="718" Canvas.Top="-14"/>
 

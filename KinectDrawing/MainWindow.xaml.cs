@@ -111,8 +111,8 @@ namespace KinectDrawing
             Line1.X2 = screenWidth / 1.8 ;*/
             Line1.Y1 = 0;
             Line1.Y2 = 1020;
-            Line1.X1 = screenWidth / 4;
-            Line1.X2 = screenWidth / 4 ;
+            Line1.X1 = 533; //screenWidth / 3
+            Line1.X2 = 533; // screenWidth / 3;
 
             Line2.Y1 = 0;
             Line2.Y2 = 1020;
@@ -303,7 +303,7 @@ namespace KinectDrawing
                 {
                     CroppedBitmap croppedBitmap = new CroppedBitmap(
                         bitmapSource,
-                        new System.Windows.Int32Rect(i * widthPicture, 0, widthPicture, heightPicture));
+                        new System.Windows.Int32Rect(i * 533, 0, 533, heightPicture));
 
                     PngBitmapEncoder encoder2 = new PngBitmapEncoder();
                     var frame = BitmapFrame.Create(croppedBitmap);
