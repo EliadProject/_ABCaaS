@@ -58,6 +58,7 @@ namespace KinectDrawing
 
         private LevelNode currentLevel;
 
+        private int screenWidth;
         private bool isRightHand;
         public TheGame(bool isRightHand)
         {
@@ -66,9 +67,9 @@ namespace KinectDrawing
             s = new Sounds.Sounds();
 
             InitializeComponent();
-
-          //  this.speechEngine = SpeechRecognition.init();
-           // this.speechEngine.SpeechRecognized += this.SpeechRecognized;
+            this.screenWidth = getScreenSize();
+            //  this.speechEngine = SpeechRecognition.init();
+            // this.speechEngine.SpeechRecognized += this.SpeechRecognized;
 
 
             _sensor = KinectSensor.GetDefault();
@@ -151,6 +152,29 @@ namespace KinectDrawing
 
         }
 
+        private int getScreenSize()
+        {
+            double screenWidth = SystemParameters.PrimaryScreenWidth;
+            //screenWidth = screenWidth / 4;
+
+            /*Line1.X1 = screenWidth / 1.8 ;
+            Line1.X2 = screenWidth / 1.8 ;*/
+            Line1.Y1 = 0;
+            Line1.Y2 = 1020;
+            Line1.X1 = 533; //screenWidth / 3
+            Line1.X2 = 533; // screenWidth / 3;
+
+            Line2.Y1 = 0;
+            Line2.Y2 = 1020;
+            Line2.X1 = screenWidth / 1.8;
+            Line2.X2 = screenWidth / 1.8;
+
+            /*Line2.X1 = screenWidth / 4 ;
+            Line2.X2 = screenWidth / 4 ;*/
+
+            return 20;
+        }
+
         private void ColorReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
             using (var frame = e.FrameReference.AcquireFrame())
@@ -167,6 +191,45 @@ namespace KinectDrawing
             }
         }
 
+        public void splitImageByThree(RenderTargetBitmap RTbmap, PngBitmapEncoder encoder, string img_name)
+        {
+            var file = @"split\full.png";
+            var output = @"split";
+            using (Stream imageStreamSource = new FileStream(
+                img_name, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                PngBitmapDecoder decoder = new PngBitmapDecoder(
+                    imageStreamSource,
+                    BitmapCreateOptions.PreservePixelFormat,
+                    BitmapCacheOption.Default);
+                BitmapSource bitmapSource = decoder.Frames[0];
+
+                /*
+                var widthPicture = bitmapSource.PixelWidth / 3;
+                var heightPicture = bitmapSource.PixelHeight;
+                */
+
+                var widthPicture = RTbmap.PixelWidth / 3;
+                var heightPicture = RTbmap.PixelHeight;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    CroppedBitmap croppedBitmap = new CroppedBitmap(
+                        bitmapSource,
+                        new System.Windows.Int32Rect(i * 533, 0, 533, heightPicture));
+
+                    PngBitmapEncoder encoder2 = new PngBitmapEncoder();
+                    var frame = BitmapFrame.Create(croppedBitmap);
+                    encoder2.Frames.Add(frame);
+                    var fileName = Path.Combine(output, "imgs" + i.ToString() + ".png");
+                    using (var fileToWrite = File.OpenWrite(fileName))
+                    {
+                        encoder2.Save(fileToWrite);
+                        fileToWrite.Close();
+                    }
+                }
+            }
+        }
         private void BodyReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             using (var frame = e.FrameReference.AcquireFrame())
@@ -277,6 +340,7 @@ namespace KinectDrawing
             {
                 encoder.Save(file);
                 file.Close();
+                splitImageByThree(RTbmap, encoder, img_name);
                 if (isPaintingCorrect(img_name))  //Correct !
                 {
                     nextLevel();

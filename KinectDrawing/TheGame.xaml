@@ -9,47 +9,88 @@
       Title="TheGame">
 
 
-    <Viewbox>
+  <Page.Resources>
+    <Style TargetType="{x:Type Button}">
+      <Setter Property="Background" Value="#373737" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="FontSize" Value="15" />
+      <Setter Property="SnapsToDevicePixels" Value="True" />
 
-        <Grid Width="1600" Height="700" MaxHeight="700" MaxWidth="1600">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="13*"/>
-                <ColumnDefinition Width="387*"/>
-            </Grid.ColumnDefinitions>
-            <Button Content=""
-                BorderThickness="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Width="100"
-                Height="100"
-                Click="goToMenu"
-                   
-                Canvas.ZIndex="2" Grid.ColumnSpan="2"
-                Style="{StaticResource MyButton}" Padding="0" Margin="1450,0,0,0">
-                <Button.Background>
-                    <ImageBrush ImageSource="images\home.png"/>
-                </Button.Background>
-            </Button>
-            <Button x:Name="Erase" Height="80" Width="150" Content="Erase Color" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Click="Erase_Click" Canvas.ZIndex="2" Grid.ColumnSpan="2"/>
-            <Button x:Name="ToggleDrawing" Height="80" Width="150" Content="Toggle Drawing" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,114" Click="Toggle_Click" Canvas.ZIndex="2" Grid.ColumnSpan="2"/>
-            <Button x:Name="ExportTrail" Height="80" Width="150" Content="Export Trail" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,214" Click="Export_Trail" Canvas.ZIndex="2" Grid.ColumnSpan="2"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="{x:Type Button}">
+            <Border CornerRadius="4" Background="{TemplateBinding Background}">
+              <Grid>
+                <Path x:Name="PathIcon" Width="15" Height="25" Stretch="Fill" Fill="#4C87B3" HorizontalAlignment="Left" Margin="17,0,0,0" Data="F1 M 30.0833,22.1667L 50.6665,37.6043L 50.6665,38.7918L 30.0833,53.8333L 30.0833,22.1667 Z "/>
+                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+              </Grid>
+            </Border>
 
-            <Label x:Name="statusLbl" Foreground="Azure" Content="" Grid.ColumnSpan="2"/>
-            <Label x:Name="LevelLbl" Foreground="Azure" HorizontalAlignment="Left" Height="23" Margin="23,106,0,0" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2" />
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#E59400" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter TargetName="PathIcon" Property="Fill" Value="Black" />
+              </Trigger>
 
-            <Image Name="camera" Grid.ColumnSpan="2"/>
-            <Canvas Name="canvas" Grid.ColumnSpan="2">
-                <local:DrawingBrush x:Name="brush" Width="100" Height="100" />
-                <Polyline Name="trail" Stroke="Blue" StrokeThickness="10">
-                    <Polyline.Effect>
-                        <BlurEffect Radius="5" />
-                    </Polyline.Effect>
-                </Polyline>
-                <Image x:Name="Animated"  HorizontalAlignment="Left" Height="511" VerticalAlignment="Top" Width="634" Canvas.Left="718" Canvas.Top="-14"/>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="OrangeRed" />
+                <Setter Property="Foreground" Value="White" />
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <StackPanel x:Key="MyStackPanel">
+      <TextBlock Name="MainContent" Text="Export Trail" FontSize="20" />
+      <TextBlock Name="DurationValue" Text="Immediately" FontSize="12" Foreground="Gainsboro" />
+    </StackPanel>
+    <StackPanel x:Key="MyStackPanel2">
+      <TextBlock Name="MainContent2" Text="Erase Color" FontSize="20" />
+      <TextBlock Name="DurationValue2" Text="Erase Screen" FontSize="12" Foreground="Gainsboro" />
+    </StackPanel>
+    <StackPanel x:Key="MyStackPanel3">
+      <TextBlock Name="MainContent3" Text="Toggle Drawing" FontSize="20" />
+      <TextBlock Name="DurationValue3" Text="Toggle" FontSize="12" Foreground="Gainsboro" />
+    </StackPanel>
+  </Page.Resources>
+  <Viewbox>
 
-            </Canvas>
+    <Grid Width="1600" Height="700">
+      <Button x:Name="ExportTrail" Width="199" Height="50" Content="{StaticResource MyStackPanel}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3,0,0,377" Click="Export_Trail" Canvas.ZIndex="2" />
+      <Button x:Name="Erase" Width="199" Height="50" Content="{StaticResource MyStackPanel2}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3,0,0,313" Click="Erase_Click" Canvas.ZIndex="2"/>
+      <Button x:Name="ToggleDrawing" Width="199" Height="50" Content="{StaticResource MyStackPanel3}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3,0,0,250" Click="Toggle_Click" Canvas.ZIndex="2"/>
 
-        </Grid>
+      <Label x:Name="statusLbl" Foreground="Azure" Content="" Canvas.Left="572" Canvas.Top="384"/>
+      <!-- <Label x:Name="LdevelLbl" Foreground="Azure" HorizontalAlignment="Left" Height="23" Margin="23,106,0,0" VerticalAlignment="Top" Width="120" /> -->
+      <Label x:Name="LevelLbl"
+      Content="Label"
+      HorizontalContentAlignment="Center"
+      Width="200"
+      Foreground="Black"
+      HorizontalAlignment="Left" Height="23"
+      Margin="2,230,0,0" VerticalAlignment="Top"
+      Background="Beige"
+      Padding="1"
+      FontSize="15" />
 
-    </Viewbox>
+      <Image Name="camera"/>
+      <Canvas Name="canvas">
+        <local:DrawingBrush x:Name="brush" Width="100" Height="100" />
+        <Polyline Name="trail" Stroke="Blue" StrokeThickness="10">
+          <Polyline.Effect>
+            <BlurEffect Radius="5" />
+          </Polyline.Effect>
+        </Polyline>
+        <Line Grid.Column="2" Name="Line1" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" />
+        <Line Grid.Column="2" Name="Line2" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" />
+
+        <Image x:Name="Animated"  HorizontalAlignment="Left" Height="511" VerticalAlignment="Top" Width="634" Canvas.Left="718" Canvas.Top="-14"/>
+
+      </Canvas>
+
+    </Grid>
+
+  </Viewbox>
 </Page>
