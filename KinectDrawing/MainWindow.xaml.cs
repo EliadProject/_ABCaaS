@@ -203,7 +203,7 @@ namespace KinectDrawing
 
                     if (body != null)
                     {
-                        Joint handRight = body.Joints[JointType.HandLeft];
+                        Joint handRight = body.Joints[JointType.HandRight];
 
 
                         if (handRight.TrackingState != TrackingState.NotTracked)
@@ -278,12 +278,12 @@ namespace KinectDrawing
 
             Console.ReadLine();
         }
-        public void splitImageByThree(RenderTargetBitmap encoder)
+        public void splitImageByThree(RenderTargetBitmap RTbmap, PngBitmapEncoder encoder, string img_name)
         {
             var file = @"split\full.png";
             var output = @"split";
             using (Stream imageStreamSource = new FileStream(
-                file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                img_name, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 PngBitmapDecoder decoder = new PngBitmapDecoder(
                     imageStreamSource,
@@ -296,22 +296,23 @@ namespace KinectDrawing
                 var heightPicture = bitmapSource.PixelHeight;
                 */
 
-                var widthPicture = encoder.PixelWidth;
-                var heightPicture = encoder.PixelHeight;
+                var widthPicture = RTbmap.PixelWidth / 3;
+                var heightPicture = RTbmap.PixelHeight;
 
                 for (int i = 0; i < 3; i++)
                 {
                     CroppedBitmap croppedBitmap = new CroppedBitmap(
-                        encoder,
+                        bitmapSource,
                         new System.Windows.Int32Rect(i * widthPicture, 0, widthPicture, heightPicture));
 
-                    /* PngBitmapEncoder encoder = new PngBitmapEncoder(); */
+                    PngBitmapEncoder encoder2 = new PngBitmapEncoder();
                     var frame = BitmapFrame.Create(croppedBitmap);
-                    encoder.Frames.Add(frame);
-                    var fileName = Path.Combine(output, i.ToString() + ".png");
-                    using (var stream = new FileStream(fileName, FileMode.Create))
+                    encoder2.Frames.Add(frame);
+                    var fileName = Path.Combine(output, "imgs" + i.ToString() + ".png");
+                    using (var fileToWrite = File.OpenWrite(fileName))
                     {
-                        encoder.Save(stream);
+                        encoder2.Save(fileToWrite);
+                        fileToWrite.Close();
                     }
                 }
             }
@@ -330,13 +331,12 @@ namespace KinectDrawing
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(RTbmap));
 
-            splitImageByThree(RTbmap);
-
             string img_name = @"images\imgs" + img_num++ + @".jpg";
             using (var file = File.OpenWrite(img_name))
             {
                 encoder.Save(file);
                 file.Close();
+                splitImageByThree(RTbmap, encoder, img_name);
                 if (isPaintingCorrect(img_name))  //Correct !
                 {
                     nextLevel();
