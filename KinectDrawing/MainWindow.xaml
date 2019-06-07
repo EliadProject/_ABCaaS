@@ -8,7 +8,7 @@
         Title="KINECT Drawing" Height="Auto" Width="Auto">
     <Grid>
         <Frame x:Name="Main"  NavigationUIVisibility="Hidden"  DataContext="MyPageInformation"
-         Source="{Binding}"></Frame>
+         Source="{Binding}" ></Frame>
     </Grid>
 
 </Window>

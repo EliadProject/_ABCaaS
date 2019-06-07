@@ -67,8 +67,8 @@ namespace KinectDrawing
 
             InitializeComponent();
 
-            this.speechEngine = SpeechRecognition.init();
-            this.speechEngine.SpeechRecognized += this.SpeechRecognized;
+          //  this.speechEngine = SpeechRecognition.init();
+           // this.speechEngine.SpeechRecognized += this.SpeechRecognized;
 
 
             _sensor = KinectSensor.GetDefault();
@@ -389,7 +389,7 @@ namespace KinectDrawing
         private void goToMenu(object sender, RoutedEventArgs e)
         {
             NavigationService ns = NavigationService.GetNavigationService(this);
-            ns.GoBack();
+            ns.GoBack(); 
             //load dimenstions of menu 
             Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["MenuHeight"]);
             Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["MenuWidth"]);
