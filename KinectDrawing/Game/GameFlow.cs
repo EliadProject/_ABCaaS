@@ -11,12 +11,15 @@ namespace KinectDrawing.Game
     {
         static public LevelNode createGameFlow()
         {
-            LevelsLinkedList levelsLinkedList = new LevelsLinkedList('B');
-            levelsLinkedList.AddToLast('C');
-            levelsLinkedList.AddToLast('L');
-            levelsLinkedList.AddToLast('S');
-            levelsLinkedList.AddToLast('B');
-            levelsLinkedList.AddToLast('D');
+            LevelsLinkedList levelsLinkedList = new LevelsLinkedList("B");
+            levelsLinkedList.AddToLast("DOG");
+            levelsLinkedList.AddToLast("CAT");
+            levelsLinkedList.AddToLast("THE");
+            levelsLinkedList.AddToLast("C");
+            levelsLinkedList.AddToLast("L");
+            levelsLinkedList.AddToLast("S");
+            levelsLinkedList.AddToLast("B");
+            levelsLinkedList.AddToLast("D");
 
             return levelsLinkedList.getHead();
         }

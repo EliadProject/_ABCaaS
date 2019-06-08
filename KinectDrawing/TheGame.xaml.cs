@@ -67,7 +67,15 @@ namespace KinectDrawing
             s = new Sounds.Sounds();
 
             InitializeComponent();
-            this.screenWidth = getScreenSize();
+
+            //Init GameFlow
+            currentLevel = GameFlow.createGameFlow();
+
+            if(currentLevel.getLetter().ToString().Length > 1)
+            {
+                getScreenSize();
+            }
+
             //  this.speechEngine = SpeechRecognition.init();
             // this.speechEngine.SpeechRecognized += this.SpeechRecognized;
 
@@ -94,8 +102,6 @@ namespace KinectDrawing
 
                 camera.Source = _bitmap;
 
-                //Init GameFlow
-                currentLevel = GameFlow.createGameFlow();
                 changeLetter();
 
             }
@@ -104,7 +110,7 @@ namespace KinectDrawing
 
         private void changeLetter()
         {
-            LevelLbl.Content = "Letter: " + currentLevel.getLetter();
+            LevelLbl.Content = "Letter / Word: " + currentLevel.getLetter();
         }
 
         /// <summary>
@@ -152,7 +158,7 @@ namespace KinectDrawing
 
         }
 
-        private int getScreenSize()
+        private void getScreenSize()
         {
             double screenWidth = SystemParameters.PrimaryScreenWidth;
             //screenWidth = screenWidth / 4;
@@ -171,8 +177,6 @@ namespace KinectDrawing
 
             /*Line2.X1 = screenWidth / 4 ;
             Line2.X2 = screenWidth / 4 ;*/
-
-            return 20;
         }
 
         private void ColorReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
@@ -340,7 +344,8 @@ namespace KinectDrawing
             {
                 encoder.Save(file);
                 file.Close();
-                splitImageByThree(RTbmap, encoder, img_name);
+                if (currentLevel.getLetter().ToString().Length > 1)
+                    splitImageByThree(RTbmap, encoder, img_name);
                 if (isPaintingCorrect(img_name))  //Correct !
                 {
                     nextLevel();
@@ -350,8 +355,6 @@ namespace KinectDrawing
 
                     failAndRestart();
                 }
-
-
             }
         }
 
