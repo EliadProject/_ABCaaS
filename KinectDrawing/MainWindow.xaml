@@ -6,8 +6,10 @@
         mc:Ignorable="d"
         WindowState="Maximized" WindowStyle="SingleBorderWindow"
         Title="KINECT Drawing" >
+    
     <Grid>
-        <Frame x:Name="Main"  NavigationUIVisibility="Hidden"  DataContext="MyPageInformation"
+        
+        <Frame x:Name="Main"   NavigationUIVisibility="Hidden"  DataContext="MyPageInformation"
          Source="{Binding}" ></Frame>
     </Grid>
 

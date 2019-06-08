@@ -5,24 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KinectDrawing"
         mc:Ignorable="d"  
-      
-        Title="ABCaaS App"  >
-    <Viewbox>
-        <Grid>
+     
+        Title="ABCaaS App">
+    <Grid>
             <Grid.Background>
                 <ImageBrush ImageSource="images\bg.png" />
             </Grid.Background>
 
-            <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="122,0" Height="420">
-                <Image  Source="images\logo.png" Height="150"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,50" >
+                <Image  Source="images\logo.png" Height="200"/>
 
-                <Image Source="images\slogen.png" Height="100"/>
+                <Image Source="images\slogen.png" Height="150"/>
 
-                <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Center" >
+                <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Center" Margin="0,100" >
 
                     <Button Content=""
                 BorderThickness="0"
-                Width="80"
+                Width="100"
                 
                 Click="Button_Click"
                 Style="{StaticResource MyButton}">
@@ -33,7 +32,7 @@
 
                     <Button Content=""
                 BorderThickness="0"          
-                Width="80"
+                Width="100"
                
                 Click="Button_Click"
                 Style="{StaticResource MyButton}">
@@ -44,7 +43,7 @@
 
                     <Button Content=""
                 BorderThickness="0"
-                Width="80"
+                Width="100"
                 
                 Click="ExitApp"
                 Style="{StaticResource MyButton}">
@@ -56,7 +55,7 @@
             </StackPanel>
 
 
-            <StackPanel Orientation="Horizontal" Margin="0,300,0,0" Height="80">
+            <StackPanel Orientation="Horizontal" Margin="5,300,0,0" Height="120">
                 <StackPanel.Resources>
                     <Style x:Key="Flag" TargetType="RadioButton">
                         <Style.Triggers>
@@ -76,12 +75,11 @@
                         <Setter Property="Margin" Value="3"/>
                     </Style>
                 </StackPanel.Resources>
-                <RadioButton GroupName="hand" Content="images\left_hand.png" Style="{StaticResource Flag}"  Width="60" Checked="left_hand_check" />
-                <RadioButton GroupName="hand" Content="images\right_hand.png" Style="{StaticResource Flag}" IsChecked="True"  Width="60" Checked="right_hand_check" />
+                <RadioButton GroupName="hand" Content="images\left_hand.png" Style="{StaticResource Flag}"  Width="90" Checked="left_hand_check" />
+                <RadioButton GroupName="hand" Content="images\right_hand.png" Style="{StaticResource Flag}" IsChecked="True"  Width="90" Checked="right_hand_check" />
             </StackPanel>
         </Grid>
 
-    </Viewbox>
 </Page>
     
     
