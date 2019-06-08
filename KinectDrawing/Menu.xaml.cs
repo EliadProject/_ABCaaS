@@ -45,8 +45,8 @@ namespace KinectDrawing
             gameInstance.setIsHandRight(isRightHand);
             ns.Navigate(gameInstance);
             //load TheGame dimenstions
-            Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["TheGameHeight"]);
-            Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["TheGameWidth"]);
+            //Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["TheGameHeight"]);
+            //Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["TheGameWidth"]);
         }
 
         private void ExitApp(object sender, RoutedEventArgs e)

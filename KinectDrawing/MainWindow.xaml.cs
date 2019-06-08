@@ -38,13 +38,13 @@ namespace KinectDrawing
     {
         public MainWindow()
         {
-            InitializeComponent();
+           InitializeComponent();
             Menu menu= new Menu();
             Main.Content = menu;
 
             //load dimenstions of menu 
-            Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["MenuHeight"]);
-            Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["MenuWidth"]);
+          //  Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["MenuHeight"]);
+           // Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["MenuWidth"]);
         }
 
        

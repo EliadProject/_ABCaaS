@@ -455,8 +455,8 @@ namespace KinectDrawing
             NavigationService ns = NavigationService.GetNavigationService(this);
             ns.GoBack(); 
             //load dimenstions of menu 
-            Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["MenuHeight"]);
-            Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["MenuWidth"]);
+          //  Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["MenuHeight"]);
+           // Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["MenuWidth"]);
         }
     }
 }

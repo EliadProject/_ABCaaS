@@ -4,22 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KinectDrawing"
-        mc:Ignorable="d" Height="512" Width="1024"
+        mc:Ignorable="d"  
+      
         Title="ABCaaS App"  >
-    <Grid >
-        <Grid.Background>
-            <ImageBrush ImageSource="images\bg.png"/>
-        </Grid.Background>
+    <Viewbox>
+     <Grid>
+            <Grid.Background>
+                <ImageBrush ImageSource="images\bg.png" />
+            </Grid.Background>
 
-        <Image Margin="325,0,343,335" Source="images\logo.png"/>
+            <StackPanel Height="400"  Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+                 <Image  Source="images\logo.png"/>
 
-        <Image Margin="339,-123,358,34" Source="images\slogen.png"/>
-
-        <Button Content=""
+                 <Image Source="images\slogen.png"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="500,100,0,-2"  >
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Margin" Value="0,100,0,0"/>
+                    </Style>
+                </StackPanel.Resources>
+                
+                <Button Content=""
                 BorderThickness="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="325,216,0,0"
                 Width="100"
                 Height="100"
                 Click="Button_Click"
@@ -30,10 +37,7 @@
         </Button>
 
         <Button Content=""
-                BorderThickness="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="454,216,0,0"
+                BorderThickness="0"          
                 Width="100"
                 Height="100"
                 Click="Button_Click"
@@ -45,9 +49,6 @@
 
         <Button Content=""
                 BorderThickness="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Margin="575,216,0,0"
                 Width="100"
                 Height="100"
                 Click="ExitApp"
@@ -56,11 +57,11 @@
                 <ImageBrush ImageSource="images\exit.png"/>
             </Button.Background>
         </Button>
+            </StackPanel>
 
 
 
-
-        <StackPanel Orientation="Horizontal" Margin="0,300,0,0">
+            <StackPanel Orientation="Horizontal" Margin="0,300,0,0">
             <StackPanel.Resources>
                 <Style x:Key="Flag" TargetType="RadioButton">
                     <Style.Triggers>
@@ -85,7 +86,7 @@
         </StackPanel>
     </Grid>
 
-
+    </Viewbox>
 </Page>
     
     
