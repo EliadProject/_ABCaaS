@@ -9,8 +9,8 @@ namespace KinectDrawing.Game.LevelClasses
     class LevelNode
     {
         public LevelNode next;
-        public char letter;
-        public char getLetter()
+        public string letter;
+        public string getLetter()
         {
             return this.letter;
         }

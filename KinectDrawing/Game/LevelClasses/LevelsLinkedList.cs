@@ -10,7 +10,7 @@ namespace KinectDrawing.Game.LevelClasses
     {
         private LevelNode head; // the first node
         private LevelNode currentNode; //the last node in the list
-        public LevelsLinkedList(char letter)
+        public LevelsLinkedList(string letter)
         {
             this.head = new LevelNode();
             this.head.letter = letter;
@@ -31,7 +31,7 @@ namespace KinectDrawing.Game.LevelClasses
             }
         }
 
-        public void AddToLast(char letter)
+        public void AddToLast(string letter)
         {
             LevelNode toAdd = new LevelNode();
             toAdd.letter = letter;
