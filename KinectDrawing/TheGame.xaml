@@ -56,7 +56,7 @@
   </Page.Resources>
   <Viewbox>
 
-    <Grid Width="1600" Height="700">
+    <Grid Name="cameraSize">
       <Button x:Name="ExportTrail" Width="199" Height="50" Content="{StaticResource MyStackPanel}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3,0,0,377" Click="Export_Trail" Canvas.ZIndex="2" />
       <Button x:Name="Erase" Width="199" Height="50" Content="{StaticResource MyStackPanel2}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3,0,0,313" Click="Erase_Click" Canvas.ZIndex="2"/>
       <Button x:Name="ToggleDrawing" Width="199" Height="50" Content="{StaticResource MyStackPanel3}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3,0,0,250" Click="Toggle_Click" Canvas.ZIndex="2"/>

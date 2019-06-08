@@ -60,6 +60,14 @@ namespace KinectDrawing
 
         private int screenWidth;
         private bool isRightHand;
+
+        private enum Directions
+        {
+            left = 0,
+            middle = 1,
+            right = 2
+        };
+
         public TheGame(bool isRightHand)
         {
             this.isRightHand = isRightHand;
@@ -71,10 +79,13 @@ namespace KinectDrawing
             //Init GameFlow
             currentLevel = GameFlow.createGameFlow();
 
-            if(currentLevel.getLetter().ToString().Length > 1)
+            Loaded += delegate
             {
-                getScreenSize();
-            }
+                if (currentLevel.getLetter().ToString().Length > 1)
+                {
+                    getScreenSize();
+                }
+            };
 
             //  this.speechEngine = SpeechRecognition.init();
             // this.speechEngine.SpeechRecognized += this.SpeechRecognized;
@@ -103,7 +114,6 @@ namespace KinectDrawing
                 camera.Source = _bitmap;
 
                 changeLetter();
-
             }
         }
 
@@ -161,22 +171,15 @@ namespace KinectDrawing
         private void getScreenSize()
         {
             double screenWidth = SystemParameters.PrimaryScreenWidth;
-            //screenWidth = screenWidth / 4;
-
-            /*Line1.X1 = screenWidth / 1.8 ;
-            Line1.X2 = screenWidth / 1.8 ;*/
             Line1.Y1 = 0;
-            Line1.Y2 = 1020;
-            Line1.X1 = 533; //screenWidth / 3
-            Line1.X2 = 533; // screenWidth / 3;
+            Line1.Y2 = cameraSize.ActualHeight;
+            Line1.X1 = cameraSize.ActualWidth / 3; //screenWidth / 3
+            Line1.X2 = cameraSize.ActualWidth / 3; // screenWidth / 3;
 
             Line2.Y1 = 0;
-            Line2.Y2 = 1020;
-            Line2.X1 = screenWidth / 1.8;
-            Line2.X2 = screenWidth / 1.8;
-
-            /*Line2.X1 = screenWidth / 4 ;
-            Line2.X2 = screenWidth / 4 ;*/
+            Line2.Y2 = cameraSize.ActualHeight;
+            Line2.X1 = (cameraSize.ActualWidth * 2) / 3;
+            Line2.X2 = (cameraSize.ActualWidth * 2) / 3; 
         }
 
         private void ColorReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
@@ -197,8 +200,7 @@ namespace KinectDrawing
 
         public void splitImageByThree(RenderTargetBitmap RTbmap, PngBitmapEncoder encoder, string img_name)
         {
-            var file = @"split\full.png";
-            var output = @"split";
+            var output = @"images";
             using (Stream imageStreamSource = new FileStream(
                 img_name, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
@@ -213,19 +215,19 @@ namespace KinectDrawing
                 var heightPicture = bitmapSource.PixelHeight;
                 */
 
-                var widthPicture = RTbmap.PixelWidth / 3;
+                var widthPicture = (RTbmap.PixelWidth / 3) - 250;
                 var heightPicture = RTbmap.PixelHeight;
 
                 for (int i = 0; i < 3; i++)
                 {
                     CroppedBitmap croppedBitmap = new CroppedBitmap(
                         bitmapSource,
-                        new System.Windows.Int32Rect(i * 533, 0, 533, heightPicture));
+                        new System.Windows.Int32Rect(i * widthPicture, 0, widthPicture, heightPicture));
 
                     PngBitmapEncoder encoder2 = new PngBitmapEncoder();
                     var frame = BitmapFrame.Create(croppedBitmap);
                     encoder2.Frames.Add(frame);
-                    var fileName = Path.Combine(output, "imgs" + i.ToString() + ".png");
+                    var fileName = Path.Combine(output, "imgs_" + ((Directions)i).ToString() + ".png");
                     using (var fileToWrite = File.OpenWrite(fileName))
                     {
                         encoder2.Save(fileToWrite);
