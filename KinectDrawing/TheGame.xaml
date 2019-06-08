@@ -46,11 +46,11 @@
 
             </StackPanel.Resources>
             <TextBlock Name="MainContent" Text="Export Trail" FontSize="20" />
-            <TextBlock Name="DurationValue" Text="Immediately" FontSize="12" Foreground="Gainsboro" />
+            <TextBlock Name="DurationValue" Text="Check" FontSize="12" Foreground="Gainsboro" />
         </StackPanel>
         <StackPanel x:Key="MyStackPanel2">
             <TextBlock Name="MainContent2" Text="Erase Color" FontSize="20" />
-            <TextBlock Name="DurationValue2" Text="Erase Screen" FontSize="12" Foreground="Gainsboro" />
+            <TextBlock Name="DurationValue2" Text="Erase" FontSize="12" Foreground="Gainsboro" />
         </StackPanel>
         <StackPanel x:Key="MyStackPanel3">
             <TextBlock Name="MainContent3" Text="Toggle Drawing" FontSize="20" />
