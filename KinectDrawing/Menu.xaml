@@ -8,83 +8,78 @@
       
         Title="ABCaaS App"  >
     <Viewbox>
-     <Grid>
+        <Grid>
             <Grid.Background>
                 <ImageBrush ImageSource="images\bg.png" />
             </Grid.Background>
 
-            <StackPanel Height="400"  Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
-                 <Image  Source="images\logo.png"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="122,0" Height="420">
+                <Image  Source="images\logo.png" Height="150"/>
 
-                 <Image Source="images\slogen.png"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="500,100,0,-2"  >
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Margin" Value="0,100,0,0"/>
-                    </Style>
-                </StackPanel.Resources>
+                <Image Source="images\slogen.png" Height="100"/>
+
+                <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Center" >
+
+                    <Button Content=""
+                BorderThickness="0"
+                Width="80"
                 
-                <Button Content=""
-                BorderThickness="0"
-                Width="100"
-                Height="100"
                 Click="Button_Click"
                 Style="{StaticResource MyButton}">
-            <Button.Background>
-                <ImageBrush ImageSource="images\play.png"/>
-            </Button.Background>
-        </Button>
+                        <Button.Background>
+                            <ImageBrush ImageSource="images\play.png"/>
+                        </Button.Background>
+                    </Button>
 
-        <Button Content=""
+                    <Button Content=""
                 BorderThickness="0"          
-                Width="100"
-                Height="100"
+                Width="80"
+               
                 Click="Button_Click"
                 Style="{StaticResource MyButton}">
-            <Button.Background>
-                <ImageBrush ImageSource="images\info.png"/>
-            </Button.Background>
-        </Button>
+                        <Button.Background>
+                            <ImageBrush ImageSource="images\info.png"/>
+                        </Button.Background>
+                    </Button>
 
-        <Button Content=""
+                    <Button Content=""
                 BorderThickness="0"
-                Width="100"
-                Height="100"
+                Width="80"
+                
                 Click="ExitApp"
                 Style="{StaticResource MyButton}">
-            <Button.Background>
-                <ImageBrush ImageSource="images\exit.png"/>
-            </Button.Background>
-        </Button>
+                        <Button.Background>
+                            <ImageBrush ImageSource="images\exit.png"/>
+                        </Button.Background>
+                    </Button>
+                </StackPanel>
             </StackPanel>
 
 
-
-            <StackPanel Orientation="Horizontal" Margin="0,300,0,0">
-            <StackPanel.Resources>
-                <Style x:Key="Flag" TargetType="RadioButton">
-                    <Style.Triggers>
-                        <Trigger Property="IsChecked" Value="False">
-                            <Setter Property="Opacity" Value="0.5"/>
-                        </Trigger>
-                    </Style.Triggers>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="RadioButton">
-                                <Border  >
-                                    <Image Source="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </StackPanel.Resources>
-
-            <RadioButton GroupName="hand" Content="images\left_hand.png" Style="{StaticResource Flag}"  Width="140" Height="100" Checked="left_hand_check" />
-            <RadioButton GroupName="hand" Content="images\right_hand.png" Style="{StaticResource Flag}" IsChecked="True"  Width="140" Height="100" Checked="right_hand_check" />
-        </StackPanel>
-    </Grid>
+            <StackPanel Orientation="Horizontal" Margin="0,300,0,0" Height="80">
+                <StackPanel.Resources>
+                    <Style x:Key="Flag" TargetType="RadioButton">
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="RadioButton">
+                                    <Border  >
+                                        <Image Source="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Margin" Value="3"/>
+                    </Style>
+                </StackPanel.Resources>
+                <RadioButton GroupName="hand" Content="images\left_hand.png" Style="{StaticResource Flag}"  Width="60" Checked="left_hand_check" />
+                <RadioButton GroupName="hand" Content="images\right_hand.png" Style="{StaticResource Flag}" IsChecked="True"  Width="60" Checked="right_hand_check" />
+            </StackPanel>
+        </Grid>
 
     </Viewbox>
 </Page>
