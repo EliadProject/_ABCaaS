@@ -458,6 +458,7 @@ namespace KinectDrawing
 
         private void Animation(string folder)
         {
+            Animated.Visibility = Visibility.Visible;
             //read the URI from AppSettings
             var rnd = new Random();
             int num = Int32.Parse(ConfigurationManager.AppSettings[folder+"Num"]);
@@ -471,7 +472,7 @@ namespace KinectDrawing
             ImageBehavior.SetRepeatBehavior(Animated, new RepeatBehavior(TimeSpan.FromSeconds(sec)));
 
             Task taskAnimate = Task.Run(() => {
-                System.Threading.Thread.Sleep(sec * 1000);
+                System.Threading.Thread.Sleep(sec * 1000 * 100);
                 //The calling thread cannot access the object because different thread owns it
                 this.Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                 {
@@ -492,7 +493,7 @@ namespace KinectDrawing
             Animation("AnimationFail");
 
             this.s.playNotCorrectVoice(); // When the kid answer is incorrect
-            statusLbl.Content = "Incorrect!! try again please";
+            statusLbl.Content = "Incorrect! try again please";
             restart();
         }
         private void restart()
