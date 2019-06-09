@@ -202,11 +202,24 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\animations\fail\1.gif" />
-    <Resource Include="images\animations\success\1.gif" />
+    <Resource Include="images\animations\fail\old.gif" />
+    <Resource Include="images\animations\confetti.gif" />
     <Resource Include="images\left_hand.png" />
     <Resource Include="images\right_hand.png" />
     <Resource Include="images\home.png" />
+    <Resource Include="images\animations\success\1.gif" />
+    <Resource Include="images\animations\success\2.gif" />
+    <Resource Include="images\animations\success\3.gif" />
+    <Resource Include="images\animations\success\4.gif" />
+    <Resource Include="images\animations\success\5.gif" />
+    <Resource Include="images\animations\success\6.gif" />
+    <Resource Include="images\animations\success\7.gif" />
+    <Resource Include="images\animations\success\8.gif" />
+    <Resource Include="images\animations\fail\1.gif" />
+    <Resource Include="images\animations\fail\2.gif" />
+    <Resource Include="images\animations\fail\3.gif" />
+    <Resource Include="images\animations\fail\4.gif" />
+    <Resource Include="images\animations\fail\5.gif" />
     <Content Include="Kinect20.Fusion.dll" />
     <Resource Include="images\add.png" />
     <Resource Include="images\bg.png" />
