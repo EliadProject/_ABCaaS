@@ -11,6 +11,7 @@ namespace KinectDrawing
     {
         static public char predict (string img_path)
         {
+
             /*
              Comments: Images folder path: C:\Users\admin\Desktop\_ABCaaS\KinectDrawing\imgs
                        Python Anaconda path: C:\Users\admin\Anaconda3\envs\tensorenviron\python.exe
@@ -19,19 +20,22 @@ namespace KinectDrawing
 
                        Retrain our model: python retrain.py --bottleneck_dir=bottlenecks --how_many_training_steps=500 --model_dir=inception --summaries_dir=training_summaries/basic --output_graph=retrained_graph.pb --output_labels=retrained_labels.txt --image_dir=categories
              */
-            string fileName = @"label_image.py " + img_path;// img_path;
+            /*
+           string fileName = @"print.py";// img_path;
 
-            Process p = new Process();
-            p.StartInfo = new ProcessStartInfo(@"C:\Users\admin\Anaconda3\envs\tensorenviron\python.exe", fileName)
-            {
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-            p.Start();
+           Process p = new Process();
+           p.StartInfo = new ProcessStartInfo(@"C:\Users\Eliad\Anaconda3\envs\tensorflow_env\python.exe", fileName)
+           {
+               RedirectStandardOutput = true,
+               UseShellExecute = false,
+               CreateNoWindow = true
+           };
+           p.Start();
 
-            char letter = p.StandardOutput.ReadToEnd().Split(new[] { '\r', '\n' }).FirstOrDefault()[0];
-            p.WaitForExit();
+           char letter = p.StandardOutput.ReadToEnd().Split(new[] { '\r', '\n' }).FirstOrDefault()[0];
+           p.WaitForExit();
+           */
+            char letter =PythonProcess.runPython(img_path);
             return letter;
         }
     }

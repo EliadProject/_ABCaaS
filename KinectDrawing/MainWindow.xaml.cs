@@ -41,7 +41,7 @@ namespace KinectDrawing
            InitializeComponent();
             Menu menu= new Menu();
             Main.Content = menu;
-
+            PythonProcess.initProcess();
             //load dimenstions of menu 
           //  Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["MenuHeight"]);
            // Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["MenuWidth"]);
