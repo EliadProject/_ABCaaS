@@ -347,15 +347,31 @@ namespace KinectDrawing
                 encoder.Save(file);
                 file.Close();
                 if (currentLevel.getLetter().ToString().Length > 1)
+                {
                     splitImageByThree(RTbmap, encoder, img_name);
-                if (isPaintingCorrect(img_name))  //Correct !
-                {
-                    nextLevel();
-                }
-                else
-                {
+                    var isAllSplitCorrect = false;
 
-                    failAndRestart();
+                    for (int i = 0; i < 3; i++)
+                    {
+                        isAllSplitCorrect = isPaintingCorrectbySplit(@"images\imgs_" + ((Directions)i).ToString() + ".png", i);
+                        if (!isAllSplitCorrect)  //Correct !
+                        {
+                            failAndRestart();
+                        }
+                    }
+
+                    if (isAllSplitCorrect) // All 3 sub pictures are corret letter 
+                        nextLevel();
+
+                } else {
+                    if (isPaintingCorrect(img_name))  //Correct !
+                    {
+                        nextLevel();
+                    }
+                    else
+                    {
+                        failAndRestart();
+                    }
                 }
             }
         }
@@ -375,6 +391,21 @@ namespace KinectDrawing
 
             //compare to level's letter.
             string levelLetter = currentLevel.getLetter().ToString();
+            string chr = predictLetter.ToString().ToUpper();
+            if (levelLetter.Equals(chr))
+                return true;
+
+            return false;
+        }
+
+        private bool isPaintingCorrectbySplit(string img_path, int imageIndex)
+        {
+
+            char predictLetter = MachineLearning.predict(img_path);
+            //MessageBox.Show("The Letter is: " + predictLetter.ToString().ToUpper());
+
+            //compare to level's letter.
+            string levelLetter = currentLevel.getLetter().ToString().Substring(imageIndex, 1).ToUpper();
             string chr = predictLetter.ToString().ToUpper();
             if (levelLetter.Equals(chr))
                 return true;
