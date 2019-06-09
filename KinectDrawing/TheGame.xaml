@@ -58,7 +58,7 @@
         </StackPanel>
     </Page.Resources>
     <Grid Name="cameraSize">
-            <StackPanel HorizontalAlignment="Right" Canvas.ZIndex="2"  >
+        <StackPanel HorizontalAlignment="Right" Canvas.ZIndex="2"  >
             <Button Content=""
                 BorderThickness="0"
                 HorizontalAlignment="Left"
@@ -72,28 +72,28 @@
                     <ImageBrush ImageSource="images\home.png"/>
                 </Button.Background>
             </Button>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="2" Width="220" Margin="5,0">
-                <Label x:Name="statusLbl" Foreground="Azure" Content="" Margin="0,50"/>
-                <Label x:Name="LevelLbl" Margin="0,50" Content="Label" HorizontalContentAlignment="Center" Width="200" Foreground="Black" Height="23" VerticalAlignment="Top" Background="Beige" Padding="1" FontSize="15" />
-                <Button x:Name="ExportTrail" Width="200" Height="50" Margin="0,5" Content="{StaticResource MyStackPanel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Click="Export_Trail"  />
-                <Button x:Name="Erase" Width="200" Height="50" Margin="0,5"  Content="{StaticResource MyStackPanel2}" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Click="Erase_Click" />
-                <Button x:Name="ToggleDrawing" Width="200" Height="50" Margin="0,5" Content="{StaticResource MyStackPanel3}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Toggle_Click"/>
-            </StackPanel>
-            <Image Name="camera" />
-      <Canvas Name="canvas">
-        <local:DrawingBrush x:Name="brush" Width="100" Height="100" />
-        <Polyline Name="trail" Stroke="Blue" StrokeThickness="10">
-          <Polyline.Effect>
-            <BlurEffect Radius="5" />
-          </Polyline.Effect>
-        </Polyline>
-        <Line Grid.Column="2" Name="Line1" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" />
-        <Line Grid.Column="2" Name="Line2" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" />
+        </StackPanel>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center" Canvas.ZIndex="2" Width="220" Margin="5,0">
+            <Label x:Name="statusLbl" Foreground="Azure" Content="" Margin="0,50"/>
+            <Label x:Name="LevelLbl" Margin="0,50" Content="Label" HorizontalContentAlignment="Center" Width="200" Foreground="Black" Height="23" VerticalAlignment="Top" Background="Beige" Padding="1" FontSize="15" />
+            <Button x:Name="ExportTrail" Width="200" Height="50" Margin="0,5" Content="{StaticResource MyStackPanel}" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Click="Export_Trail"  />
+            <Button x:Name="Erase" Width="200" Height="50" Margin="0,5"  Content="{StaticResource MyStackPanel2}" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Click="Erase_Click" />
+            <Button x:Name="ToggleDrawing" Width="200" Height="50" Margin="0,5" Content="{StaticResource MyStackPanel3}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Toggle_Click"/>
+        </StackPanel>
+        <Image Name="camera" />
+        <Canvas Name="canvas">
+            <local:DrawingBrush x:Name="brush" Width="100" Height="100" />
+            <Polyline Name="trail" Stroke="Blue" StrokeThickness="10">
+                <Polyline.Effect>
+                    <BlurEffect Radius="5" />
+                </Polyline.Effect>
+            </Polyline>
+            <Line Grid.Column="2" Name="Line1" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" />
+            <Line Grid.Column="2" Name="Line2" Grid.Row="1" Grid.RowSpan="2" Stroke="White" StrokeThickness="4" />
 
-        <Image x:Name="Animated"  HorizontalAlignment="Left" Height="511" VerticalAlignment="Top" Width="634" Canvas.Left="718" Canvas.Top="-14"/>
+            <Image x:Name="Animated"  HorizontalAlignment="Left" Height="511" VerticalAlignment="Top" Width="634" Canvas.Left="685" Canvas.Top="90"/>
 
-      </Canvas>
+        </Canvas>
 
     </Grid>
 

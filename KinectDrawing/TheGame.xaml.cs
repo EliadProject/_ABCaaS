@@ -351,21 +351,26 @@ namespace KinectDrawing
                 if (currentLevel.getLetter().ToString().Length > 1)
                 {
                     splitImageByThree(RTbmap, encoder, img_name);
-                    var isAllSplitCorrect = false;
+                    var isSplitCorrect = false;
+                    var isAllSplitCorrect = true;
 
                     for (int i = 0; i < 3; i++)
                     {
-                        isAllSplitCorrect = isPaintingCorrectbySplit(@"images\imgs_" + ((Directions)i).ToString() + ".png", i);
-                        if (!isAllSplitCorrect)  //Correct !
+                        isSplitCorrect = isPaintingCorrectbySplit(@"images\imgs_" + ((Directions)i).ToString() + ".png", i);
+                        if (!isSplitCorrect)  //Correct !
                         {
-                            failAndRestart();
+                            isAllSplitCorrect = false;
+                            break;
                         }
                     }
 
                     if (isAllSplitCorrect) // All 3 sub pictures are corret letter 
                         nextLevel();
+                    else
+                        failAndRestart();
 
-                } else {
+                }
+                else {
                     if (isPaintingCorrect(img_name))  //Correct !
                     {
                         nextLevel();
@@ -472,7 +477,7 @@ namespace KinectDrawing
             ImageBehavior.SetRepeatBehavior(Animated, new RepeatBehavior(TimeSpan.FromSeconds(sec)));
 
             Task taskAnimate = Task.Run(() => {
-                System.Threading.Thread.Sleep(sec * 1000 * 100);
+                System.Threading.Thread.Sleep(sec * 1000);
                 //The calling thread cannot access the object because different thread owns it
                 this.Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
                 {
