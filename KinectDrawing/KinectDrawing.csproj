@@ -202,8 +202,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\animations\try_again.gif" />
-    <Resource Include="images\animations\success.gif" />
+    <Resource Include="images\animations\fail\1.gif" />
+    <Resource Include="images\animations\success\1.gif" />
     <Resource Include="images\left_hand.png" />
     <Resource Include="images\right_hand.png" />
     <Resource Include="images\home.png" />

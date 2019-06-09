@@ -454,10 +454,13 @@ namespace KinectDrawing
             restart();
         }
 
-        private void Animation(string key)
+        private void Animation(string folder)
         {
             //read the URI from AppSettings
-            var uri = ConfigurationManager.AppSettings[key];
+            var rnd = new Random();
+            int num = Int32.Parse(ConfigurationManager.AppSettings[folder+"Num"]);
+            var uri = ConfigurationManager.AppSettings[folder] + rnd.Next(1,num) + ".gif";
+            int sec = Int32.Parse(ConfigurationManager.AppSettings["AnimateSeconds"]);
             var image = new BitmapImage();
             image.BeginInit();
             image.UriSource = new Uri(uri, UriKind.Relative);
