@@ -28,6 +28,8 @@ using Path = System.IO.Path;
 using WpfAnimatedGif;
 using System.Windows.Media.Animation;
 using System.Configuration;
+using System.Windows.Threading;
+
 namespace KinectDrawing
 {
     /// <summary>
@@ -454,17 +456,31 @@ namespace KinectDrawing
             restart();
         }
 
-        private void Animation(string key)
+        private void Animation(string folder)
         {
+            Animated.Visibility = Visibility.Visible;
             //read the URI from AppSettings
-            var uri = ConfigurationManager.AppSettings[key];
+            var rnd = new Random();
+            int num = Int32.Parse(ConfigurationManager.AppSettings[folder+"Num"]);
+            var uri = ConfigurationManager.AppSettings[folder] + rnd.Next(1,num) + ".gif";
+            int sec = Int32.Parse(ConfigurationManager.AppSettings["AnimateSeconds"]);
             var image = new BitmapImage();
             image.BeginInit();
             image.UriSource = new Uri(uri, UriKind.Relative);
             image.EndInit();
             ImageBehavior.SetAnimatedSource(Animated, image);
-            //Repeat 10 times
-            ImageBehavior.SetRepeatBehavior(Animated, new RepeatBehavior(10));
+            ImageBehavior.SetRepeatBehavior(Animated, new RepeatBehavior(TimeSpan.FromSeconds(sec)));
+
+            Task taskAnimate = Task.Run(() => {
+                System.Threading.Thread.Sleep(sec * 1000 * 100);
+                //The calling thread cannot access the object because different thread owns it
+                this.Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
+                {
+                    Animated.Visibility = Visibility.Hidden;
+                }));
+            });
+
+
         }
         public void setIsHandRight(bool isRightHand)
         {
@@ -477,7 +493,7 @@ namespace KinectDrawing
             Animation("AnimationFail");
 
             this.s.playNotCorrectVoice(); // When the kid answer is incorrect
-            statusLbl.Content = "Incorrect!! try again please";
+            statusLbl.Content = "Incorrect! try again please";
             restart();
         }
         private void restart()
