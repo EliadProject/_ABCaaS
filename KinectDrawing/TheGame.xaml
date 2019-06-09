@@ -57,7 +57,7 @@
             <TextBlock Name="DurationValue3" Text="Toggle" FontSize="12" Foreground="Gainsboro" />
         </StackPanel>
     </Page.Resources>
-    <Grid >
+    <Grid Name="cameraSize">
             <StackPanel HorizontalAlignment="Right" Canvas.ZIndex="2"  >
             <Button Content=""
                 BorderThickness="0"
@@ -80,7 +80,7 @@
                 <Button x:Name="Erase" Width="200" Height="50" Margin="0,5"  Content="{StaticResource MyStackPanel2}" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Click="Erase_Click" />
                 <Button x:Name="ToggleDrawing" Width="200" Height="50" Margin="0,5" Content="{StaticResource MyStackPanel3}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="Toggle_Click"/>
             </StackPanel>
-            <Image Name="camera"/>
+            <Image Name="camera" />
       <Canvas Name="canvas">
         <local:DrawingBrush x:Name="brush" Width="100" Height="100" />
         <Polyline Name="trail" Stroke="Blue" StrokeThickness="10">

@@ -215,7 +215,7 @@ namespace KinectDrawing
                 var heightPicture = bitmapSource.PixelHeight;
                 */
 
-                var widthPicture = (RTbmap.PixelWidth / 3) - 250;
+                var widthPicture = (RTbmap.PixelWidth / 3);
                 var heightPicture = RTbmap.PixelHeight;
 
                 for (int i = 0; i < 3; i++)
@@ -333,7 +333,7 @@ namespace KinectDrawing
             //exporting trail
             Polyline newTrain = trail;
             newTrain.Measure(new Size(200, 200));
-            newTrain.Arrange(new Rect(new Size(1200, 800)));
+            newTrain.Arrange(new Rect(new Size(_width, _height)));
 
             RenderTargetBitmap RTbmap = new RenderTargetBitmap(_width, _height, 96.0, 96.0, PixelFormats.Default);
             RTbmap.Render(newTrain);
