@@ -360,6 +360,7 @@ namespace KinectDrawing
                         if (!isSplitCorrect)  //Correct !
                         {
                             isAllSplitCorrect = false;
+                            break;
                         }
                     }
 
