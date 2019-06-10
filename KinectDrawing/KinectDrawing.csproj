@@ -108,6 +108,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Class1.cs" />
     <Compile Include="TheGame.xaml.cs">
       <DependentUpon>TheGame.xaml</DependentUpon>
     </Compile>
