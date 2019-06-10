@@ -430,18 +430,26 @@ namespace KinectDrawing
                 //check the speech to the commands
                 switch (e.Result.Semantics.Value.ToString())
                 {
-                    case "Check":
+                    case "Check Result":
                         {
                             predict();
                             break;
                         }
-                    case "Erase":
+                    case "Erase Screen":
 
                         //erase points
                         trail.Points.Clear();
 
                         break;
-                    case "Toggle":
+                    
+                        //stop the drawing
+                    case "Stp":
+                        isDrawing = !isDrawing;
+
+                        break;
+
+                        //start the drawing
+                    case "Start":
                         isDrawing = !isDrawing;
 
                         break;
