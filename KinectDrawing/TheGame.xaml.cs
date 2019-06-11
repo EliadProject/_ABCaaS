@@ -37,7 +37,7 @@ namespace KinectDrawing
     /// </summary>
     public partial class TheGame : Page
     {
-
+        private List<Polyline> polylines;
         private KinectSensor _sensor = null;
         private ColorFrameReader _colorReader = null;
         private BodyFrameReader _bodyReader = null;
@@ -63,9 +63,21 @@ namespace KinectDrawing
         private int screenWidth;
         private bool isRightHand;
 
+        private bool isSecondClick;
+        private void addNewPolyline()
+        {
+            Polyline polyline = new Polyline();
+            polyline.StrokeThickness = 10;
+            SolidColorBrush brush = new SolidColorBrush();
+            brush.Color = Colors.Blue;
+            polyline.Stroke = brush;
+            polylines.Add(polyline);
+            canvas.Children.Add(polylines[polylines.Count-1]);
 
+        }
         public TheGame(bool isRightHand)
         {
+            
             this.isRightHand = isRightHand;
 
             s = new Sounds.Sounds();
@@ -111,12 +123,17 @@ namespace KinectDrawing
 
                 changeLetter();
             }
+
+            polylines = new List<Polyline>();
+            addNewPolyline();
+            isSecondClick = false;
         }
 
 
         private void changeLetter()
         {
-            LevelLbl.Content = "Letter / Word: " + currentLevel.getLetter();
+            if(currentLevel != null) 
+                LevelLbl.Content = "Letter / Word: " + currentLevel.getLetter();
         }
 
         /// <summary>
@@ -282,23 +299,19 @@ namespace KinectDrawing
                                     //draw only if it's the first run or the distance is between configured range 
                                     if ((lastPoint.X == 0 && lastPoint.Y == 0) || distance > 5 && distance < 30)
                                     {
-                                        trail.Points.Add(newPoint);
+                                        polylines[polylines.Count-1].Points.Add(newPoint);
                                     }
                                 }
-                                else
-                                {
-                                    // DRAW!
-                                    trail.Points.Add(newPoint);
-                                }
+                                
                                 lastPoint = newPoint;
 
                             }
                             double brushX, brushY;
-                            if ((newPoint.X - brush.Width/ 2.0) < 0)
+                            if ((newPoint.X - brush.Width / 2.0) < 0)
                                 brushX = 0;
                             else
                                 brushX = newPoint.X - brush.Width / 2.0;
-                            Canvas.SetLeft(brush,brushX);
+                            Canvas.SetLeft(brush, brushX);
 
                             if (newPoint.Y - brush.Height < 0)
                                 brushY = 0;
@@ -317,12 +330,15 @@ namespace KinectDrawing
 
         private void Erase_Click(object sender, RoutedEventArgs e)
         {
-            trail.Points.Clear();
+            eraseLastPolygon();
         }
         //action button for toggle_click
         private void Toggle_Click(object sender, RoutedEventArgs e)
         {
             isDrawing = !isDrawing;
+            if(isSecondClick)
+                addNewPolyline();
+            isSecondClick = !isSecondClick;
         }
 
         private void runPythonRetrain(string img_path)
@@ -349,74 +365,63 @@ namespace KinectDrawing
         public void predict()
         {
 
-
-            //exporting trail
-            Polyline newTrain = trail;
-            newTrain.Measure(new Size(200, 200));
-            newTrain.Arrange(new Rect(new Size(_width, _height)));
-
-            RenderTargetBitmap RTbmap = new RenderTargetBitmap(_width, _height, 96.0, 96.0, PixelFormats.Default);
-            RTbmap.Render(newTrain);
-
-            var encoder = new PngBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(RTbmap));
-
-            string img_name = @"images\imgs" + img_num++ + @".jpg";
-            using (var file = File.OpenWrite(img_name))
+            if (polylines.Count != currentLevel.getLetter().Length)
             {
-                encoder.Save(file);
-                file.Close();
-                if (currentLevel.getLetter().ToString().Length > 1)
+                failAndRestart();
+                return;
+            }
+            int count = 1;
+            foreach (var polyline in polylines)
+            {
+                
+                Polyline newTrain = polyline;
+                newTrain.Measure(new Size(200, 200));
+                newTrain.Arrange(new Rect(new Size(_width, _height)));
+
+                RenderTargetBitmap RTbmap = new RenderTargetBitmap(_width, _height, 96.0, 96.0, PixelFormats.Default);
+                RTbmap.Render(newTrain);
+
+                var encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(RTbmap));
+
+                string img_name = @"images\imgs" + img_num++ + @".jpg";
+                using (var file = File.OpenWrite(img_name))
                 {
-                    splitImageByThree(RTbmap, encoder, img_name);
-                    var isSplitCorrect = false;
-                    var isAllSplitCorrect = true;
-                    int count = 1;
-
-                    while (isAllSplitCorrect && count <= currentLevel.getLetter().Length)
+                    encoder.Save(file);
+                    file.Close();
+                    if (isPaintingCorrect(img_name, count -1 ))  //Correct !
                     {
-                        isAllSplitCorrect = isPaintingCorrectbySplit(@"images\imgs_" + ((count + 1)).ToString() + ".png", count - 1);
-                        if (!isAllSplitCorrect)  //Correct !
+                        if (count == polylines.Count)
                         {
-                            failAndRestart();
+                            nextLevel();
+                            return;
                         }
-                        count++;
-                    }
-
-                    if (isAllSplitCorrect) // All 3 sub pictures are corret letter 
-                        nextLevel();
-                    //else
-                        //failAndRestart();
-
-                }
-                else {
-                    if (isPaintingCorrect(img_name))  //Correct !
-                    {
-                        nextLevel();
                     }
                     else
                     {
                         failAndRestart();
+                        return;
                     }
                 }
+               
+                count++;
             }
         }
 
         private void Export_Trail(Object sender, RoutedEventArgs e)
         {
-
             predict();
         }
 
 
-        private bool isPaintingCorrect(string img_path)
+        private bool isPaintingCorrect(string img_path, int count)
         {
 
             char predictLetter = MachineLearning.predict(img_path);
             //MessageBox.Show("The Letter is: " + predictLetter.ToString().ToUpper());
 
             //compare to level's letter.
-            string levelLetter = currentLevel.getLetter().ToString();
+            string levelLetter = currentLevel.getLetter()[count].ToString();
             string chr = predictLetter.ToString().ToUpper();
             if (levelLetter.Equals(chr))
                 return true;
@@ -438,7 +443,19 @@ namespace KinectDrawing
 
             return false;
         }
-
+        private void eraseLastPolygon()
+        {
+            polylines[polylines.Count - 1].Points.Clear();
+        }
+        private void erasePolygones()
+        {
+            foreach (var polyline in polylines)
+            {
+                polyline.Points.Clear();
+            }
+            polylines = new List<Polyline>();
+            addNewPolyline();
+        }
         public void SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             // Speech utterance confidence below which we treat speech as if it hadn't been heard
@@ -457,7 +474,7 @@ namespace KinectDrawing
                     case "Erase":
 
                         //erase points
-                        trail.Points.Clear();
+                        eraseLastPolygon();
 
                         break;
                     case "Start":
@@ -487,8 +504,8 @@ namespace KinectDrawing
             Animated.Visibility = Visibility.Visible;
             //read the URI from AppSettings
             var rnd = new Random();
-            int num = Int32.Parse(ConfigurationManager.AppSettings[folder+"Num"]);
-            var uri = ConfigurationManager.AppSettings[folder] + rnd.Next(1,num) + ".gif";
+            int num = Int32.Parse(ConfigurationManager.AppSettings[folder + "Num"]);
+            var uri = ConfigurationManager.AppSettings[folder] + rnd.Next(1, num) + ".gif";
             int sec = Int32.Parse(ConfigurationManager.AppSettings["AnimateSeconds"]);
             var image = new BitmapImage();
             image.BeginInit();
@@ -497,7 +514,8 @@ namespace KinectDrawing
             ImageBehavior.SetAnimatedSource(Animated, image);
             ImageBehavior.SetRepeatBehavior(Animated, new RepeatBehavior(TimeSpan.FromSeconds(sec)));
 
-            Task taskAnimate = Task.Run(() => {
+            Task taskAnimate = Task.Run(() =>
+            {
                 System.Threading.Thread.Sleep(sec * 1000);
                 //The calling thread cannot access the object because different thread owns it
                 this.Dispatcher.Invoke(DispatcherPriority.Normal, (Action)(() =>
@@ -524,18 +542,23 @@ namespace KinectDrawing
         }
         private void restart()
         {
+            //canvas.Children.Clear();
             //erase polygon
-            getScreenSize(currentLevel.getLetter());
-            trail.Points.Clear();
+            if(currentLevel != null)
+                getScreenSize(currentLevel.getLetter());
+            erasePolygones();
+            isSecondClick = false;
+            isDrawing = true;
+
         }
 
         private void goToMenu(object sender, RoutedEventArgs e)
         {
             NavigationService ns = NavigationService.GetNavigationService(this);
-            ns.GoBack(); 
+            ns.GoBack();
             //load dimenstions of menu 
-          //  Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["MenuHeight"]);
-           // Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["MenuWidth"]);
+            //  Application.Current.MainWindow.Height = Double.Parse(ConfigurationManager.AppSettings["MenuHeight"]);
+            // Application.Current.MainWindow.Width = Double.Parse(ConfigurationManager.AppSettings["MenuWidth"]);
         }
     }
 }
