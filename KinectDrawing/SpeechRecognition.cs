@@ -48,14 +48,15 @@ namespace KinectDrawing
                 var commands = new Choices();
 
                 //define the vocabelery of the commfpytands
-                commands.Add(new SemanticResultValue("check result", "Check"));
                 commands.Add(new SemanticResultValue("check", "Check"));
+                commands.Add(new SemanticResultValue("check result", "Check"));
                 commands.Add(new SemanticResultValue("checks result", "Check"));
+                commands.Add(new SemanticResultValue("mechika", "Erase"));
+                commands.Add(new SemanticResultValue("erase", "Erase"));
+                commands.Add(new SemanticResultValue("delete", "Erase"));
                 commands.Add(new SemanticResultValue("Erase Screen", "Erase"));
-                commands.Add(new SemanticResultValue("Erase", "Erase"));
-                commands.Add(new SemanticResultValue("Erases", "Erase"));
-                commands.Add(new SemanticResultValue("toggles", "Toggle"));
-                commands.Add(new SemanticResultValue("Toggle", "Toggle"));
+                commands.Add(new SemanticResultValue("start", "Start"));
+                commands.Add(new SemanticResultValue("stop", "Stop"));
 
                 var gb = new GrammarBuilder { Culture = ri.Culture };
                 gb.Append(commands);

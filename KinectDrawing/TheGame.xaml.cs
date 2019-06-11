@@ -450,9 +450,11 @@ namespace KinectDrawing
                         trail.Points.Clear();
 
                         break;
-                    case "Toggle":
-                        isDrawing = !isDrawing;
-
+                    case "Start":
+                        isDrawing = true;
+                        break;
+                    case "Stop":
+                        isDrawing = false;
                         break;
                 }
             }
@@ -513,6 +515,7 @@ namespace KinectDrawing
         private void restart()
         {
             //erase polygon
+            getScreenSize(currentLevel.getLetter());
             trail.Points.Clear();
         }
 
