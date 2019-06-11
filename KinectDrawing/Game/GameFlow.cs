@@ -1,6 +1,7 @@
 ﻿using KinectDrawing.Game.LevelClasses;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,17 +12,25 @@ namespace KinectDrawing.Game
     {
         static public LevelNode createGameFlow()
         {
-            LevelsLinkedList levelsLinkedList = new LevelsLinkedList("DOG");
+
+            //first section - gets letter from the model
+            String currentPath = System.IO.Directory.GetCurrentDirectory();
+            String[] directories = System.IO.Directory.GetDirectories(currentPath + "/categories");
+            Array.Sort(directories);
+            LevelsLinkedList levelsLinkedList = new LevelsLinkedList(new DirectoryInfo(directories[0]).Name);
+            for (int i = 1; i < directories.Length; i++)
+            {
+                var dir = new DirectoryInfo(directories[i]);
+                var dirName = dir.Name;
+                levelsLinkedList.AddToLast(dirName);
+            }
+
             levelsLinkedList.AddToLast("DOG");
             levelsLinkedList.AddToLast("CAT");
             levelsLinkedList.AddToLast("THE");
-            levelsLinkedList.AddToLast("C");
-            levelsLinkedList.AddToLast("L");
-            levelsLinkedList.AddToLast("S");
-            levelsLinkedList.AddToLast("B");
-            levelsLinkedList.AddToLast("D");
 
-            return levelsLinkedList.getHead();
+
+            return levelsLinkedList.getHead().next;
         }
     }
 }
