@@ -63,12 +63,6 @@ namespace KinectDrawing
         private int screenWidth;
         private bool isRightHand;
 
-        private enum Directions
-        {
-            left = 0,
-            middle = 1,
-            right = 2
-        };
 
         public TheGame(bool isRightHand)
         {
@@ -85,12 +79,12 @@ namespace KinectDrawing
             {
                 if (currentLevel.getLetter().ToString().Length > 1)
                 {
-                    getScreenSize();
+                    getScreenSize(currentLevel.getLetter());
                 }
             };
 
-            //  this.speechEngine = SpeechRecognition.init();
-            // this.speechEngine.SpeechRecognized += this.SpeechRecognized;
+            this.speechEngine = SpeechRecognition.init();
+            this.speechEngine.SpeechRecognized += this.SpeechRecognized;
 
 
             _sensor = KinectSensor.GetDefault();
@@ -170,9 +164,11 @@ namespace KinectDrawing
 
         }
 
-        private void getScreenSize()
+        private void getScreenSize(string letter)
         {
             double screenWidth = SystemParameters.PrimaryScreenWidth;
+
+            /*
             Line1.Y1 = 0;
             Line1.Y2 = cameraSize.ActualHeight;
             Line1.X1 = cameraSize.ActualWidth / 3; //screenWidth / 3
@@ -182,6 +178,21 @@ namespace KinectDrawing
             Line2.Y2 = cameraSize.ActualHeight;
             Line2.X1 = (cameraSize.ActualWidth * 2) / 3;
             Line2.X2 = (cameraSize.ActualWidth * 2) / 3; 
+*/
+
+            for (int i = 1; i <= letter.Length; i++)
+            {
+                Line line = new Line();
+                line.Stroke = Brushes.White;
+                line.StrokeThickness = 4;
+
+                line.Y1 = 0;
+                line.Y2 = cameraSize.ActualHeight;
+                line.X1 = (cameraSize.ActualWidth * i) / letter.Length;
+                line.X2 = (cameraSize.ActualWidth * i) / letter.Length;
+
+                canvas.Children.Add(line);
+            }
         }
 
         private void ColorReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
@@ -212,24 +223,21 @@ namespace KinectDrawing
                     BitmapCacheOption.Default);
                 BitmapSource bitmapSource = decoder.Frames[0];
 
-                /*
-                var widthPicture = bitmapSource.PixelWidth / 3;
-                var heightPicture = bitmapSource.PixelHeight;
-                */
 
-                var widthPicture = (RTbmap.PixelWidth / 3);
+
+                var widthPicture = (RTbmap.PixelWidth / this.currentLevel.getLetter().Length);
                 var heightPicture = RTbmap.PixelHeight;
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 2; i <= this.currentLevel.getLetter().Length + 1; i++)
                 {
                     CroppedBitmap croppedBitmap = new CroppedBitmap(
                         bitmapSource,
-                        new System.Windows.Int32Rect(i * widthPicture, 0, widthPicture, heightPicture));
+                        new System.Windows.Int32Rect((i - 2) * widthPicture, 0, widthPicture, heightPicture));
 
                     PngBitmapEncoder encoder2 = new PngBitmapEncoder();
                     var frame = BitmapFrame.Create(croppedBitmap);
                     encoder2.Frames.Add(frame);
-                    var fileName = Path.Combine(output, "imgs_" + ((Directions)i).ToString() + ".png");
+                    var fileName = Path.Combine(output, "imgs_" + i.ToString() + ".png");
                     using (var fileToWrite = File.OpenWrite(fileName))
                     {
                         encoder2.Save(fileToWrite);
@@ -353,21 +361,22 @@ namespace KinectDrawing
                     splitImageByThree(RTbmap, encoder, img_name);
                     var isSplitCorrect = false;
                     var isAllSplitCorrect = true;
+                    int count = 1;
 
-                    for (int i = 0; i < 3; i++)
+                    while (isAllSplitCorrect && count <= currentLevel.getLetter().Length)
                     {
-                        isSplitCorrect = isPaintingCorrectbySplit(@"images\imgs_" + ((Directions)i).ToString() + ".png", i);
-                        if (!isSplitCorrect)  //Correct !
+                        isAllSplitCorrect = isPaintingCorrectbySplit(@"images\imgs_" + ((count + 1)).ToString() + ".png", count - 1);
+                        if (!isAllSplitCorrect)  //Correct !
                         {
-                            isAllSplitCorrect = false;
-                            break;
+                            failAndRestart();
                         }
+                        count++;
                     }
 
                     if (isAllSplitCorrect) // All 3 sub pictures are corret letter 
                         nextLevel();
-                    else
-                        failAndRestart();
+                    //else
+                        //failAndRestart();
 
                 }
                 else {
@@ -498,7 +507,7 @@ namespace KinectDrawing
             Animation("AnimationFail");
 
             this.s.playNotCorrectVoice(); // When the kid answer is incorrect
-            statusLbl.Content = "Incorrect! try again please";
+            //statusLbl.Content = "Incorrect! try again please";
             restart();
         }
         private void restart()
