@@ -507,7 +507,7 @@ namespace KinectDrawing
             Animation("AnimationFail");
 
             this.s.playNotCorrectVoice(); // When the kid answer is incorrect
-            statusLbl.Content = "Incorrect! try again please";
+            //statusLbl.Content = "Incorrect! try again please";
             restart();
         }
         private void restart()
