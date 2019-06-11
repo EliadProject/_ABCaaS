@@ -513,6 +513,7 @@ namespace KinectDrawing
         private void restart()
         {
             //erase polygon
+            getScreenSize(currentLevel.getLetter());
             trail.Points.Clear();
         }
 
