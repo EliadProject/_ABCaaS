@@ -18,6 +18,8 @@ namespace KinectDrawing.Game
             String[] directories = System.IO.Directory.GetDirectories(currentPath + "/categories");
             Array.Sort(directories);
             LevelsLinkedList levelsLinkedList = new LevelsLinkedList(new DirectoryInfo(directories[0]).Name);
+            levelsLinkedList.AddToLast("DO");
+            levelsLinkedList.AddToLast("DOLL");
             for (int i = 1; i < directories.Length; i++)
             {
                 var dir = new DirectoryInfo(directories[i]);

@@ -15,7 +15,7 @@ namespace KinectDrawing
         {
 
             proc = new Process();
-            proc.StartInfo.FileName = @"C:\Anaconda3\envs\tensorflow_env\python.exe";
+            proc.StartInfo.FileName = @"C:\Anaconda3\envs\tensorenviron\python.exe";
             proc.StartInfo.RedirectStandardOutput = true;
             proc.StartInfo.UseShellExecute = false;
             proc.StartInfo.CreateNoWindow = true;
