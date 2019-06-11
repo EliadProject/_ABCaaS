@@ -83,11 +83,7 @@
         <Image Name="camera" />
         <Canvas Name="canvas">
             <local:DrawingBrush x:Name="brush" Width="100" Height="100" />
-            <Polyline Name="trail" Stroke="Blue" StrokeThickness="10">
-                <Polyline.Effect>
-                    <BlurEffect Radius="5" />
-                </Polyline.Effect>
-            </Polyline>
+
 
             <Image x:Name="Animated"  HorizontalAlignment="Left" Height="511" VerticalAlignment="Top" Width="634" Canvas.Left="685" Canvas.Top="90"/>
 

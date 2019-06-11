@@ -29,6 +29,8 @@ using WpfAnimatedGif;
 using System.Windows.Media.Animation;
 using System.Configuration;
 using System.Windows.Threading;
+using System.Windows.Media;
+using System.Windows.Media.Effects;
 
 namespace KinectDrawing
 {
@@ -49,6 +51,7 @@ namespace KinectDrawing
         private byte[] _pixels = null;
         private WriteableBitmap _bitmap = null;
 
+        Line line;
         Point lastPoint;
         Point newPoint;
 
@@ -111,6 +114,15 @@ namespace KinectDrawing
 
                 changeLetter();
             }
+
+            line = new Line();
+            line.Stroke = Brushes.Blue;
+            line.StrokeThickness = 10;
+
+            BlurEffect blur = new BlurEffect();
+            blur.Radius = 5;
+
+            line.Effect = blur;
         }
 
 
@@ -282,14 +294,24 @@ namespace KinectDrawing
                                     //draw only if it's the first run or the distance is between configured range 
                                     if ((lastPoint.X == 0 && lastPoint.Y == 0) || distance > 5 && distance < 30)
                                     {
-                                        trail.Points.Add(newPoint);
+                                        line = new Line();
+                                        line.Stroke = Brushes.Blue;
+                                        line.StrokeThickness = 10;
+
+                                        BlurEffect blur = new BlurEffect();
+                                        blur.Radius = 5;
+
+                                        line.Effect = blur;
+
+                                        line.X1 = lastPoint.X;
+                                        line.Y1 = lastPoint.Y;
+
+                                        line.X2 = newPoint.X;
+                                        line.Y2 = newPoint.Y;
+                                        canvas.Children.Add(line);
                                     }
                                 }
-                                else
-                                {
-                                    // DRAW!
-                                    trail.Points.Add(newPoint);
-                                }
+                               
                                 lastPoint = newPoint;
 
                             }
@@ -307,7 +329,7 @@ namespace KinectDrawing
 
         private void Erase_Click(object sender, RoutedEventArgs e)
         {
-            trail.Points.Clear();
+            canvas.Children.Clear();
         }
         //action button for toggle_click
         private void Toggle_Click(object sender, RoutedEventArgs e)
@@ -341,12 +363,12 @@ namespace KinectDrawing
 
 
             //exporting trail
-            Polyline newTrain = trail;
-            newTrain.Measure(new Size(200, 200));
-            newTrain.Arrange(new Rect(new Size(_width, _height)));
+           // Polyline newTrain = trail;
+           // newTrain.Measure(new Size(200, 200));
+           // newTrain.Arrange(new Rect(new Size(_width, _height)));
 
             RenderTargetBitmap RTbmap = new RenderTargetBitmap(_width, _height, 96.0, 96.0, PixelFormats.Default);
-            RTbmap.Render(newTrain);
+            RTbmap.Render(canvas);
 
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(RTbmap));
@@ -447,7 +469,7 @@ namespace KinectDrawing
                     case "Erase":
 
                         //erase points
-                        trail.Points.Clear();
+                        canvas.Children.Clear();
 
                         break;
                     case "Start":
@@ -516,7 +538,7 @@ namespace KinectDrawing
         {
             //erase polygon
             getScreenSize(currentLevel.getLetter());
-            trail.Points.Clear();
+            canvas.Children.Clear();
         }
 
         private void goToMenu(object sender, RoutedEventArgs e)
