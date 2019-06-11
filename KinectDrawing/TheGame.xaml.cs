@@ -293,8 +293,18 @@ namespace KinectDrawing
                                 lastPoint = newPoint;
 
                             }
-                            Canvas.SetLeft(brush, newPoint.X - brush.Width / 2.0);
-                            Canvas.SetTop(brush, newPoint.Y - brush.Height);
+                            double brushX, brushY;
+                            if ((newPoint.X - brush.Width/ 2.0) < 0)
+                                brushX = 0;
+                            else
+                                brushX = newPoint.X - brush.Width / 2.0;
+                            Canvas.SetLeft(brush,brushX);
+
+                            if (newPoint.Y - brush.Height < 0)
+                                brushY = 0;
+                            else
+                                brushY = newPoint.Y - brush.Height;
+                            Canvas.SetTop(brush, brushY);
 
                         }
 
